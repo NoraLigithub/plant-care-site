@@ -1,0 +1,42 @@
+name: 部署 GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出网页
+        uses: actions/checkout@v6
+
+      - name: 配置 GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 整理发布文件
+        run: |
+          mkdir _site
+          rsync -a --exclude=.git/ --exclude=.github/ --exclude=_site/ ./ _site/
+
+      - name: 上传网页产物
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: 发布网页
+        id: deployment
+        uses: actions/deploy-pages@v4
