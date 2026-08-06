@@ -39,13 +39,38 @@ if (receiptForm) {
   const summary = receiptForm.querySelector("[data-selected-summary]");
   const status = receiptForm.querySelector("[data-receipt-status]");
   const clearButton = receiptForm.querySelector("[data-clear-receipt]");
-  const copyButton = receiptForm.querySelector("[data-copy-receipt]");
-  const shareButton = receiptForm.querySelector("[data-share-receipt]");
-  const generatedPanel = receiptForm.querySelector("[data-generated-receipt]");
-  const generatedText = receiptForm.querySelector("[data-generated-text]");
+  const connectButton = receiptForm.querySelector("[data-connect-care]");
+  const submitButton = receiptForm.querySelector("[data-submit-care]");
+  const apiUrl = document.body.dataset.apiUrl || "";
+  const tokenKey = "meditation-sync-token";
   const defaultDate = receiptForm.dataset.defaultDate;
   const storageKey = `plant-care-receipt:${defaultDate}`;
-  const receiptedTasks = new Set();
+  const pendingKey = `plant-care-pending:${defaultDate}`;
+  const syncedTasks = new Set();
+
+  const safeStorage = {
+    get(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (_error) {
+        return null;
+      }
+    },
+    set(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (_error) {
+        // 隐私模式下仍允许本次会话继续使用。
+      }
+    },
+    remove(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (_error) {
+        // 同上。
+      }
+    },
+  };
 
   const taskKey = (input) => [
     input.dataset.careKind,
@@ -55,27 +80,35 @@ if (receiptForm) {
 
   const selectedTasks = () => taskInputs.filter((input) => input.checked);
   const pendingTasks = () => selectedTasks().filter(
-    (input) => !receiptedTasks.has(taskKey(input)),
+    (input) => !syncedTasks.has(taskKey(input)),
   );
 
-  const invalidateSentence = () => {
-    if (generatedPanel) generatedPanel.hidden = true;
-    if (generatedText) generatedText.value = "";
-    if (copyButton) copyButton.hidden = true;
-    if (shareButton) shareButton.hidden = true;
-    if (status) status.textContent = "";
+  const pendingReceipts = () => {
+    try {
+      const parsed = JSON.parse(safeStorage.get(pendingKey) || "[]");
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (_error) {
+      return [];
+    }
+  };
+
+  const savePendingReceipts = (receipts) => {
+    if (receipts.length) safeStorage.set(pendingKey, JSON.stringify(receipts));
+    else safeStorage.remove(pendingKey);
   };
 
   const updateCardState = (input) => {
     const card = input.closest(".task-card");
-    const isReceipted = input.checked && receiptedTasks.has(taskKey(input));
+    const isSynced = syncedTasks.has(taskKey(input));
+    if (isSynced) input.checked = true;
+    input.disabled = isSynced;
     if (card) {
       card.classList.toggle("is-complete", input.checked);
-      card.classList.toggle("is-receipted", isReceipted);
+      card.classList.toggle("is-receipted", isSynced);
     }
     const state = input.closest(".task-check")?.querySelector("[data-task-state]");
     if (state) {
-      state.textContent = isReceipted ? "已生成" : input.checked ? "已完成" : "完成";
+      state.textContent = isSynced ? "已记录" : input.checked ? "已完成" : "完成";
     }
   };
 
@@ -88,9 +121,9 @@ if (receiptForm) {
       } else if (!selected.length) {
         summary.textContent = `0 / ${taskInputs.length} 项已完成`;
       } else if (pending.length) {
-        summary.textContent = `${selected.length} / ${taskInputs.length} 项已完成 · ${pending.length} 项待生成`;
+        summary.textContent = `${selected.length} / ${taskInputs.length} 项已完成 · ${pending.length} 项待提交`;
       } else {
-        summary.textContent = `${selected.length} / ${taskInputs.length} 项已完成 · 回执已生成`;
+        summary.textContent = `${selected.length} / ${taskInputs.length} 项已完成 · 已记录到 GitHub`;
       }
     }
     taskInputs.forEach(updateCardState);
@@ -101,22 +134,18 @@ if (receiptForm) {
       date: dateInput?.value || defaultDate,
       note: noteInput?.value || "",
       tasks: selectedTasks().map(taskKey),
-      receipted: [...receiptedTasks],
+      synced: [...syncedTasks],
     };
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(draft));
-    } catch (_error) {
-      // 隐私模式禁止本地存储时，表单仍可正常提交。
-    }
+    safeStorage.set(storageKey, JSON.stringify(draft));
   };
 
   try {
-    const draft = JSON.parse(localStorage.getItem(storageKey) || "null");
+    const draft = JSON.parse(safeStorage.get(storageKey) || "null");
     if (draft) {
       if (dateInput && draft.date) dateInput.value = draft.date;
       if (noteInput && draft.note) noteInput.value = draft.note;
       const savedTasks = new Set(draft.tasks || []);
-      for (const key of draft.receipted || []) receiptedTasks.add(key);
+      for (const key of draft.synced || []) syncedTasks.add(key);
       taskInputs.forEach((input) => {
         input.checked = savedTasks.has(taskKey(input));
       });
@@ -127,85 +156,128 @@ if (receiptForm) {
 
   taskInputs.forEach((input) => {
     input.addEventListener("change", () => {
-      if (!input.checked) receiptedTasks.delete(taskKey(input));
       updateSummary();
       saveDraft();
-      invalidateSentence();
+      if (status) status.textContent = "";
     });
   });
   dateInput?.addEventListener("change", () => {
+    syncedTasks.clear();
+    taskInputs.forEach((input) => {
+      input.disabled = false;
+    });
     saveDraft();
-    invalidateSentence();
+    if (status) status.textContent = "";
+    refreshCompleted();
   });
   noteInput?.addEventListener("input", () => {
     saveDraft();
-    invalidateSentence();
   });
 
   clearButton?.addEventListener("click", () => {
     taskInputs.forEach((input) => {
-      input.checked = false;
+      if (!syncedTasks.has(taskKey(input))) input.checked = false;
     });
-    receiptedTasks.clear();
     if (noteInput) noteInput.value = "";
     if (dateInput) dateInput.value = defaultDate;
-    try {
-      localStorage.removeItem(storageKey);
-    } catch (_error) {
-      // 同上，无法访问本地存储不影响清空当前表单。
-    }
-    if (status) status.textContent = "今天的本机完成状态已重置。";
-    if (generatedPanel) generatedPanel.hidden = true;
-    if (generatedText) generatedText.value = "";
-    if (copyButton) copyButton.hidden = true;
-    if (shareButton) shareButton.hidden = true;
+    savePendingReceipts([]);
+    if (status) status.textContent = "未提交内容已清除；GitHub 中的完成记录保留。";
+    saveDraft();
     updateSummary();
   });
 
-  const sentenceForTask = (input) => {
-    const kind = input.dataset.careKind;
-    const name = input.dataset.careName;
-    const action = input.dataset.careAction;
-    if (kind === "water") return `${name}已浇水`;
-    if (kind === "fertilize") return `${name}已施肥`;
-    if (kind === "inspect") return `已检查${name}盆土`;
-    return `${name}已${action}`;
+  const idempotencyKey = () => {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   };
 
-  const copySentence = async () => {
-    const sentence = generatedText?.value || "";
-    if (!sentence) return;
+  const careRequest = async (path, options = {}, token = safeStorage.get(tokenKey) || "") => {
+    if (!apiUrl) {
+      const error = new Error("私人同步接口尚未发布");
+      error.status = 0;
+      throw error;
+    }
+    const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
+    if (options.body) headers["Content-Type"] = "application/json";
+    const response = await fetch(`${apiUrl}${path}`, { ...options, headers });
+    let payload = {};
     try {
-      await navigator.clipboard.writeText(sentence);
-      if (status) status.textContent = "已复制，粘贴到飞书机器人私聊即可。";
+      payload = await response.json();
     } catch (_error) {
-      generatedText.focus();
-      generatedText.select();
-      const copied = document.execCommand("copy");
-      if (status) {
-        status.textContent = copied
-          ? "已复制，粘贴到飞书机器人私聊即可。"
-          : "复制失败，请长按上面的一句话手动复制。";
+      payload = {};
+    }
+    if (!response.ok) {
+      const error = new Error(payload.error || "同步失败，请稍后重试");
+      error.status = response.status;
+      throw error;
+    }
+    return payload;
+  };
+
+  const applyCompletedKeys = (keys) => {
+    for (const key of keys || []) syncedTasks.add(key);
+    taskInputs.forEach((input) => {
+      if (syncedTasks.has(taskKey(input))) input.checked = true;
+    });
+    saveDraft();
+    updateSummary();
+  };
+
+  const syncReceipt = async (receipt) => {
+    const result = await careRequest("/api/care", {
+      method: "POST",
+      body: JSON.stringify(receipt),
+    });
+    applyCompletedKeys(result.completed_keys);
+    return result;
+  };
+
+  const removePending = (key) => {
+    savePendingReceipts(
+      pendingReceipts().filter((receipt) => receipt.idempotency_key !== key),
+    );
+  };
+
+  const retryPending = async () => {
+    if (!apiUrl || !safeStorage.get(tokenKey) || !navigator.onLine) return;
+    const receipts = pendingReceipts();
+    for (const receipt of receipts) {
+      try {
+        await syncReceipt(receipt);
+        removePending(receipt.idempotency_key);
+      } catch (error) {
+        if (error.status === 401 && connectButton) connectButton.hidden = false;
+        return;
       }
+    }
+    if (receipts.length) {
+      const savedNotes = new Set(receipts.map((receipt) => receipt.note).filter(Boolean));
+      if (noteInput && savedNotes.has(noteInput.value.trim())) noteInput.value = "";
+      saveDraft();
+      if (status) status.textContent = "本机暂存记录已同步到 GitHub。";
     }
   };
 
-  copyButton?.addEventListener("click", copySentence);
-
-  shareButton?.addEventListener("click", async () => {
-    const sentence = generatedText?.value || "";
-    if (!sentence || typeof navigator.share !== "function") return;
-    try {
-      await navigator.share({ title: "养护回执", text: sentence });
-      if (status) status.textContent = "已打开系统分享，请选择飞书机器人私聊。";
-    } catch (error) {
-      if (error?.name !== "AbortError" && status) {
-        status.textContent = "分享没有完成，可以改用复制。";
-      }
+  const refreshCompleted = async () => {
+    if (!apiUrl || !safeStorage.get(tokenKey)) {
+      if (connectButton) connectButton.hidden = false;
+      return;
     }
+    try {
+      const operationDate = dateInput?.value || defaultDate;
+      const result = await careRequest(`/api/care?date=${encodeURIComponent(operationDate)}`);
+      applyCompletedKeys(result.completed_keys);
+      if (connectButton) connectButton.hidden = true;
+    } catch (error) {
+      if (error.status === 401 && connectButton) connectButton.hidden = false;
+    }
+  };
+
+  connectButton?.addEventListener("click", () => {
+    document.querySelector("[data-connect-meditation]")?.click();
   });
 
-  receiptForm.addEventListener("submit", (event) => {
+  receiptForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const selected = pendingTasks();
     const note = noteInput?.value.trim() || "";
@@ -214,32 +286,54 @@ if (receiptForm) {
     if (!selected.length && !note) {
       if (status) {
         status.textContent = selectedTasks().length
-          ? "已完成项目都生成过回执了；可以再勾选新项目或写一句补充。"
+          ? "已完成项目都记录过了；可以再勾选新项目或写一句补充。"
           : "请至少完成一项，或者写一句补充。";
       }
       if (!selectedTasks().length) noteInput?.focus();
       return;
     }
 
-    const actions = selected.map(sentenceForTask);
-    const actionText = actions.join("；");
-    const sentence = actionText
-      ? `${careDate}：${actionText}。${note ? `补充：${note}` : ""}`
-      : `${careDate}：${note}`;
-    selected.forEach((input) => receiptedTasks.add(taskKey(input)));
-    if (noteInput) noteInput.value = "";
-    saveDraft();
-    updateSummary();
-    if (generatedText) generatedText.value = sentence;
-    if (generatedPanel) generatedPanel.hidden = false;
-    if (copyButton) copyButton.hidden = false;
-    if (shareButton) shareButton.hidden = typeof navigator.share !== "function";
-    if (status) status.textContent = selected.length
-      ? `已生成 ${selected.length} 个新增完成项目。`
-      : "文字回执已生成。";
+    const receipt = {
+      operation_date: careDate,
+      idempotency_key: idempotencyKey(),
+      actions: selected.map((input) => ({
+        kind: input.dataset.careKind,
+        entity_id: input.dataset.careId,
+        name: input.dataset.careName,
+        action: input.dataset.careAction,
+      })),
+      note,
+    };
+    savePendingReceipts([...pendingReceipts(), receipt]);
+    if (submitButton) submitButton.disabled = true;
+    if (status) status.textContent = "正在写入私有 GitHub……";
+    try {
+      await syncReceipt(receipt);
+      removePending(receipt.idempotency_key);
+      if (noteInput) noteInput.value = "";
+      saveDraft();
+      if (connectButton) connectButton.hidden = true;
+      if (status) status.textContent = selected.length
+        ? `已记录 ${selected.length} 个新增完成项目到 GitHub。`
+        : "文字补充已记录到 GitHub。";
+    } catch (error) {
+      if (error.status === 401 && connectButton) connectButton.hidden = false;
+      if (status) status.textContent = error.status === 401
+        ? "请先连接私人同步；本次内容仍保存在这台设备。"
+        : "暂时没能写入 GitHub，内容已保存在本机，联网后会自动重试。";
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
   });
 
+  document.addEventListener("private-sync-connected", () => {
+    if (connectButton) connectButton.hidden = true;
+    retryPending().then(refreshCompleted);
+  });
+  window.addEventListener("online", retryPending);
+  if (dateInput) dateInput.max = defaultDate;
   updateSummary();
+  retryPending().then(refreshCompleted);
 }
 
 const meditationApp = document.querySelector("[data-meditation-app]");
@@ -544,6 +638,7 @@ if (meditationApp) {
       await loadStats(candidate);
       syncToken = candidate;
       safeStorage.set(tokenKey, candidate);
+      document.dispatchEvent(new CustomEvent("private-sync-connected"));
       if (input) input.value = "";
       if (connectFeedback) connectFeedback.textContent = "";
       showStep("duration");

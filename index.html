@@ -62,8 +62,8 @@
         <div class="meditation-connect-card" data-meditation-locked>
           <div class="connect-orb" aria-hidden="true">◌</div>
           <div>
-            <h3>连接私人统计</h3>
-            <p>首次在这台设备输入一次同步口令，以后打开页面即可直接记录。</p>
+            <h3>连接私人记录</h3>
+            <p>首次输入一次同步口令，以后打坐和养护完成项都可直接写入私人 GitHub。</p>
           </div>
           <button type="button" data-connect-meditation>连接</button>
         </div>
@@ -166,7 +166,7 @@
         <section class="receipt-card" id="receipt" aria-labelledby="receipt-title">
           <div class="receipt-intro">
             <div><p class="kicker dark">CARE RECEIPT</p><h2 id="receipt-title">完成回执</h2></div>
-            <p>可以分几次完成；每次只生成新增项目，完成状态会保存在这台设备。</p>
+            <p>可以分几次完成；每次只提交新增项目，Worker 会直接写入私有 GitHub 仓库。</p>
           </div>
           <form data-care-receipt data-repository="NoraLigithub/plant-care" data-default-date="2026-08-06">
             <div class="receipt-toolbar">
@@ -180,17 +180,12 @@
               <span>文字补充</span>
               <textarea id="care-note" name="care-note" maxlength="1200" rows="2" data-care-note placeholder="例如：紫苏水仓还是满的；文竹有两片黄叶。"></textarea>
             </label>
-            <label class="note-field generated-receipt" data-generated-receipt hidden>
-              <span>生成的一句话</span>
-              <textarea rows="3" readonly data-generated-text></textarea>
-            </label>
             <div class="receipt-actions">
-              <button class="submit-receipt" type="submit">生成本次回执 <span aria-hidden="true">→</span></button>
-              <button class="clear-receipt" type="button" data-copy-receipt hidden>复制</button>
-              <button class="clear-receipt" type="button" data-share-receipt hidden>分享到飞书</button>
-              <button class="clear-receipt" type="button" data-clear-receipt>重置今日</button>
+              <button class="submit-receipt" type="submit" data-submit-care>提交本次记录 <span aria-hidden="true">→</span></button>
+              <button class="clear-receipt" type="button" data-connect-care hidden>连接私人同步</button>
+              <button class="clear-receipt" type="button" data-clear-receipt>清除未提交</button>
             </div>
-            <p class="receipt-help">生成后分享到飞书，或复制后回复机器人私聊；发送后我才能登记到养护档案。</p>
+            <p class="receipt-help">提交后直接记录到私有 GitHub；断网时先保存在本机，恢复网络后自动重试。</p>
             <p class="receipt-status" role="status" data-receipt-status></p>
           </form>
         </section>
@@ -761,7 +756,7 @@
       <section class="meditation-step connect-step" data-meditation-step="connect" hidden>
         <p class="modal-kicker">PRIVATE SYNC</p>
         <h2 id="meditation-connect-title">连接你的私人记录</h2>
-        <p>同步口令只保存在这台设备，不会写进公开网页。连接后打坐记录会直接进入私人仓库。</p>
+        <p>同步口令只保存在这台设备，不会写进公开网页。连接后打坐和养护回执会直接进入私人仓库。</p>
         <form class="connect-form" data-meditation-connect-form>
           <label for="meditation-token">同步口令</label>
           <input id="meditation-token" type="password" autocomplete="current-password" required data-meditation-token placeholder="粘贴一次即可">
@@ -814,7 +809,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-08-07 03:02（Asia/Shanghai）</p>
+      <p>数据生成于 2026-08-07 03:53（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>

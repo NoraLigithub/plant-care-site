@@ -360,6 +360,7 @@ h1, h2, h3, p { margin-top: 0; }
 .overdue .due-badge { color: var(--rose); background: #f8e7e1; }
 .task-check { position: relative; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: var(--ink-soft); font-size: 11px; font-weight: 750; white-space: nowrap; }
 .task-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--leaf); cursor: pointer; }
+.task-check input:disabled { cursor: default; opacity: 1; }
 .task-card.is-receipted .task-check { color: #668071; }
 .supplement-only { min-height: 48px; background: #f8faf6; }
 .supplement-only .task-copy h3 { font-size: 15px; }
@@ -430,9 +431,10 @@ h1, h2, h3, p { margin-top: 0; }
 .submit-receipt, .clear-receipt { min-height: 38px; padding: 8px 14px; border: 0; border-radius: 999px; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
 .submit-receipt { display: inline-flex; align-items: center; gap: 14px; color: white; background: var(--forest); }
 .submit-receipt:hover { background: #1c4d39; }
+.submit-receipt:disabled { cursor: wait; opacity: .62; }
 .clear-receipt { color: var(--ink-soft); background: #e7ece3; }
 .receipt-help, .receipt-status { margin: 8px 0 0; color: #77857d; font-size: 10px; }
-.receipt-status { min-height: 16px; color: var(--rose); font-weight: 700; }
+.receipt-status { min-height: 16px; color: var(--ink-soft); font-weight: 700; }
 
 .collection-section { background: var(--cream); }
 .item-section { background: #e8eee3; }
