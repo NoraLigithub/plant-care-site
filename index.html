@@ -17,6 +17,7 @@
       <a class="brand" href="#top" aria-label="回到顶部"><span aria-hidden="true">⌇</span> 养护花园</a>
       <div class="nav-links">
         <a href="#today">今天</a>
+        <a href="#receipt">回执</a>
         <a href="#plants">植物</a>
         <a href="#items">物品</a>
       </div>
@@ -32,7 +33,7 @@
         <div class="summary-orbit orbit-one" aria-hidden="true"></div>
         <div class="summary-orbit orbit-two" aria-hidden="true"></div>
         <p>今日养护</p>
-        <strong>2</strong>
+        <strong>1</strong>
         <span>项任务</span>
       </div>
     </div>
@@ -55,17 +56,18 @@
         <h3>茉莉花</h3>
         <p>浸盆5分钟后取出沥干</p>
       </div>
-      <span class="due-badge">今天</span>
-    </article>
-
-    <article class="task-card overdue">
-      <div class="task-icon" aria-hidden="true">⌂</div>
-      <div class="task-copy">
-        <p class="eyebrow">换水并冲洗水盆</p>
-        <h3>猫水盆（客厅）</h3>
-        <p>位置：客厅</p>
+      <div class="task-meta">
+        <span class="due-badge">今天</span>
+        
+        <label class="task-check">
+          <input type="checkbox" data-care-task
+            data-care-kind="water"
+            data-care-id="P0001"
+            data-care-name="茉莉花"
+            data-care-action="浇水">
+          <span>已完成</span>
+        </label>
       </div>
-      <span class="due-badge">逾期 1 天</span>
     </article></div>
 
         <aside class="upcoming" aria-labelledby="upcoming-title">
@@ -76,12 +78,12 @@
           <div class="upcoming-list">
             <div class="upcoming-row">
               <time datetime="2026-08-08"><strong>08.08</strong><span>周六</span></time>
-              <ul><li>浇水 · 大绿萝</li><li>浇水 · 幸福树</li><li>浇水 · 文竹</li><li>浇水 · 珍珠如意</li><li>浇水 · 青苹果竹芋</li><li>浇水 · 小绿萝</li><li>浇水 · 棕竹</li><li>浇水 · 散尾葵</li><li>浇水 · 小叶赤楠</li><li>浇水 · 三角梅</li><li>浇水 · 四季桂花</li><li>施肥 · 幸福树</li></ul>
+              <ul><li>浇水 · 大绿萝</li><li>浇水 · 幸福树</li><li>浇水 · 文竹</li><li>浇水 · 珍珠如意</li><li>浇水 · 青苹果竹芋</li><li>浇水 · 小绿萝</li><li>浇水 · 棕竹</li><li>浇水 · 散尾葵</li><li>浇水 · 小叶赤楠</li><li>浇水 · 三角梅</li><li>浇水 · 四季桂花</li><li>浇水 · 非洲堇</li><li>施肥 · 幸福树</li><li>换水并冲洗水盆 · 猫水盆（客厅）</li></ul>
             </div>
 
             <div class="upcoming-row">
               <time datetime="2026-08-09"><strong>08.09</strong><span>周日</span></time>
-              <ul><li>浇水 · 多肉</li><li>施肥 · 大绿萝</li><li>施肥 · 珍珠如意</li><li>施肥 · 青苹果竹芋</li><li>施肥 · 小绿萝</li></ul>
+              <ul><li>施肥 · 大绿萝</li><li>施肥 · 珍珠如意</li><li>施肥 · 青苹果竹芋</li><li>施肥 · 小绿萝</li></ul>
             </div>
 
             <div class="upcoming-row">
@@ -99,6 +101,33 @@
               <ul><li>浇水 · 紫苏</li><li>浇水 · 甜罗勒</li><li>浇水 · 迷迭香</li><li>浇水 · 百里香</li></ul>
             </div></div>
         </aside>
+
+        <section class="receipt-card" id="receipt" aria-labelledby="receipt-title">
+          <div class="receipt-intro">
+            <p class="kicker dark">CARE RECEIPT</p>
+            <h2 id="receipt-title">做完了，告诉我。</h2>
+            <p>勾选上面的“已完成”，也可以像聊天一样补一句。勾选项会自动登记；文字只进入私人养护收件箱，下一次我处理项目时会按对话理解。</p>
+          </div>
+          <form data-care-receipt data-repository="NoraLigithub/plant-care" data-default-date="2026-08-07">
+            <div class="receipt-toolbar">
+              <label>
+                <span>操作日期</span>
+                <input type="date" name="care-date" value="2026-08-07" required data-care-date>
+              </label>
+              <div class="selection-summary" aria-live="polite" data-selected-summary>还没有勾选任务</div>
+            </div>
+            <label class="note-field" for="care-note">
+              <span>文字补充</span>
+              <textarea id="care-note" name="care-note" maxlength="1200" rows="4" data-care-note placeholder="例如：茉莉浸盆了；紫苏水仓还是满的没加；文竹有两片黄叶。"></textarea>
+            </label>
+            <div class="receipt-actions">
+              <button class="submit-receipt" type="submit">去私人页面提交回执 <span aria-hidden="true">→</span></button>
+              <button class="clear-receipt" type="button" data-clear-receipt>清空</button>
+            </div>
+            <p class="receipt-help">会打开 GitHub 私人页面，请登录后再按一次“Submit new issue”。勾选记录随后自动刷新；文字补充会保留给我继续判断。这里不保存密码，也不会把回执公开。</p>
+            <p class="receipt-status" role="status" data-receipt-status></p>
+          </form>
+        </section>
       </div>
     </section>
 
@@ -114,7 +143,7 @@
         </div>
         <div class="entity-grid" id="plant-list" data-filter-list>
             <article class="entity-card plant-card" data-search="p0001 茉莉花 茉莉（jasminum sambac，具体品种待确认） 同一阳台西侧 健康">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0001</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0001.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0001.webp" alt="茉莉花" loading="lazy" decoding="async"></a><figcaption>P0001</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">茉莉（Jasminum sambac，具体品种待确认）</p><h3>茉莉花</h3></div>
@@ -135,7 +164,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0002 大绿萝 绿萝／黄金葛（epipremnum aureum） 同一阳台西侧 观察中">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0002</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0002.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0002.webp" alt="大绿萝" loading="lazy" decoding="async"></a><figcaption>P0002</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">绿萝／黄金葛（Epipremnum aureum）</p><h3>大绿萝</h3></div>
@@ -156,7 +185,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0003 紫苏 紫苏（perilla frutescens var. crispa） 阳台北花架高层 观察中">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0003</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0003.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0003.webp" alt="紫苏" loading="lazy" decoding="async"></a><figcaption>P0003</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">紫苏（Perilla frutescens var. crispa）</p><h3>紫苏</h3></div>
@@ -177,7 +206,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0004 幸福树 幸福树／菜豆树（radermachera sinica） 阳台北面地上 观察中">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0004</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0004.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0004.webp" alt="幸福树" loading="lazy" decoding="async"></a><figcaption>P0004</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">幸福树／菜豆树（Radermachera sinica）</p><h3>幸福树</h3></div>
@@ -198,7 +227,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0005 甜罗勒 甜罗勒（ocimum basilicum） 阳台北花架高层 健康">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0005</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0005.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0005.webp" alt="甜罗勒" loading="lazy" decoding="async"></a><figcaption>P0005</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">甜罗勒（Ocimum basilicum）</p><h3>甜罗勒</h3></div>
@@ -219,7 +248,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0006 迷迭香 迷迭香（salvia rosmarinus） 阳台北花架高层 健康">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0006</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0006.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0006.webp" alt="迷迭香" loading="lazy" decoding="async"></a><figcaption>P0006</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">迷迭香（Salvia rosmarinus）</p><h3>迷迭香</h3></div>
@@ -240,7 +269,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0007 百里香 百里香（thymus vulgaris） 阳台北花架高层 观察中">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0007</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0007.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0007.webp" alt="百里香" loading="lazy" decoding="async"></a><figcaption>P0007</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">百里香（Thymus vulgaris）</p><h3>百里香</h3></div>
@@ -282,7 +311,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0009 珍珠如意 珍珠如意（学名待确认，外形近 aglaonema） 阳台北面 健康">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0009</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0009.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0009.webp" alt="珍珠如意" loading="lazy" decoding="async"></a><figcaption>P0009</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">珍珠如意（学名待确认，外形近 Aglaonema）</p><h3>珍珠如意</h3></div>
@@ -303,7 +332,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0010 青苹果竹芋 青苹果竹芋（goeppertia orbifolia） 阳台北花架低层 健康">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0010</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0010.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0010.webp" alt="青苹果竹芋" loading="lazy" decoding="async"></a><figcaption>P0010</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">青苹果竹芋（Goeppertia orbifolia）</p><h3>青苹果竹芋</h3></div>
@@ -324,7 +353,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0011 小绿萝 绿萝／黄金葛（epipremnum aureum） 阳台北花架低层 健康">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0011</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0011.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0011.webp" alt="小绿萝" loading="lazy" decoding="async"></a><figcaption>P0011</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">绿萝／黄金葛（Epipremnum aureum）</p><h3>小绿萝</h3></div>
@@ -366,7 +395,7 @@
             </article>
 
             <article class="entity-card plant-card" data-search="p0013 棕竹 棕竹（rhapis excelsa） 客厅靠阳台玻璃门旁 观察中">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0013</figcaption></figure>
+              <figure><a class="plant-photo" href="assets/photos/P0013.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0013.webp" alt="棕竹" loading="lazy" decoding="async"></a><figcaption>P0013</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">棕竹（Rhapis excelsa）</p><h3>棕竹</h3></div>
@@ -470,17 +499,17 @@
               </div>
             </article>
 
-            <article class="entity-card plant-card" data-search="p0018 多肉 多肉植物（莲座型，具体品种待确认） 卧室 观察中">
-              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0018</figcaption></figure>
+            <article class="entity-card plant-card" data-search="p0018 多肉 多肉植物（莲座型，具体品种待确认） 卧室 已移除">
+              <figure><a class="plant-photo" href="assets/photos/P0018.webp" target="_blank" rel="noopener" title="查看大图"><img src="assets/photos/P0018.webp" alt="多肉" loading="lazy" decoding="async"></a><figcaption>P0018</figcaption></figure>
               <div class="entity-body">
                 <div class="entity-heading">
                   <div><p class="eyebrow">多肉植物（莲座型，具体品种待确认）</p><h3>多肉</h3></div>
-                  <span class="status watching">观察中</span>
+                  <span class="status neutral">已移除</span>
                 </div>
                 <p class="location"><span aria-hidden="true">⌖</span>卧室</p>
                 <div class="due-pair">
-                  <div><span>下次浇水</span><strong class="soon">08-09 · 2 天后</strong></div>
-                  <div><span>下次施肥</span><strong class="soon">09-15 · 39 天后</strong></div>
+                  <div><span>下次浇水</span><strong class="neutral">不参与提醒</strong></div>
+                  <div><span>下次施肥</span><strong class="neutral">未设置</strong></div>
                 </div>
                 <dl>
                   <div><dt>浇水方法</dt><dd>土完全干透后浇透，盆底出水后沥干，不留积水</dd></div>
@@ -506,6 +535,27 @@
                 <dl>
                   <div><dt>浇水方法</dt><dd>自吸水盆看水仓，空了加水</dd></div>
                   <div><dt>光照</dt><dd>明亮散射光，耐阴</dd></div>
+                  <div><dt>最近浇水</dt><dd>暂无</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0020 非洲堇 非洲堇（saintpaulia spp.，具体品种待确认） 阳台北边 观察中">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0020</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">非洲堇（Saintpaulia spp.，具体品种待确认）</p><h3>非洲堇</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北边</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 1 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-04 · 28 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面刚干时从上方浇；15–28℃浇透，超过30℃仅浇至整体土潮并倒掉托盘水</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，严禁太阳直晒；高温时减光</dd></div>
                   <div><dt>最近浇水</dt><dd>暂无</dd></div>
                   <div><dt>最近施肥</dt><dd>暂无</dd></div>
                 </dl>
@@ -570,11 +620,11 @@
                   <span class="status healthy">在用</span>
                 </div>
                 <p class="location"><span aria-hidden="true">⌖</span>客厅</p>
-                <div class="item-next"><span>下次换水并冲洗水盆</span><strong class="overdue">08-06 · 逾期 1 天</strong></div>
+                <div class="item-next"><span>下次换水并冲洗水盆</span><strong class="soon">08-08 · 1 天后</strong></div>
                 <dl>
                   <div><dt>维护动作</dt><dd>换水并冲洗水盆</dd></div>
                   <div><dt>提醒周期</dt><dd>1 天</dd></div>
-                  <div><dt>最近完成</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近完成</dt><dd>2026-08-07</dd></div>
                   <div><dt>启用日期</dt><dd>2026-08-02</dd></div>
                 </dl>
               </div>
@@ -605,7 +655,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>养护花园</strong></div>
-      <p>数据生成于 2026-08-07 01:51（Asia/Shanghai）</p>
+      <p>数据生成于 2026-08-07 01:59（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>
