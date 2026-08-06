@@ -40,3 +40,5 @@ jobs:
       - name: 发布网页
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 900000
