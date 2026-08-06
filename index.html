@@ -103,95 +103,94 @@
           <p>到期日是检查提示；浇水前先确认盆土确实需要水。</p>
         </div>
         <div class="task-grid">
-    <article class="task-card supplement">
-      <div class="task-icon" aria-hidden="true">✚</div>
+    <article class="task-card supplement no-icon supplement-only">
+
       <div class="task-copy">
-        <p class="eyebrow">每日补充剂</p>
-        <h3>甘氨酸镁螯合物</h3>
-        <p>每日1粒；睡前配水服用；胃部不适时改为晚餐后</p>
+        <div class="task-heading"><h3>甘氨酸镁螯合物</h3></div>
+
       </div>
       <div class="task-meta">
-        <span class="due-badge">每天</span>
+
         <label class="task-check">
           <input type="checkbox" data-care-task
             data-care-kind="supplement"
             data-care-id="S0001"
             data-care-name="甘氨酸镁螯合物"
-            data-care-action="服用">
-          <span>已完成</span>
+            data-care-action="服用"
+            aria-label="标记甘氨酸镁螯合物服用已完成">
+          <span data-task-state>完成</span>
         </label>
       </div>
     </article>
 
-    <article class="task-card supplement">
-      <div class="task-icon" aria-hidden="true">✚</div>
+    <article class="task-card supplement no-icon supplement-only">
+
       <div class="task-copy">
-        <p class="eyebrow">每日补充剂</p>
-        <h3>甘氨酸纯粉</h3>
-        <p>每日3/4平茶匙；晚上睡前兑水服用；与晚餐间隔约2小时</p>
+        <div class="task-heading"><h3>甘氨酸纯粉</h3></div>
+
       </div>
       <div class="task-meta">
-        <span class="due-badge">每天</span>
+
         <label class="task-check">
           <input type="checkbox" data-care-task
             data-care-kind="supplement"
             data-care-id="S0002"
             data-care-name="甘氨酸纯粉"
-            data-care-action="服用">
-          <span>已完成</span>
+            data-care-action="服用"
+            aria-label="标记甘氨酸纯粉服用已完成">
+          <span data-task-state>完成</span>
         </label>
       </div>
     </article>
 
-    <article class="task-card supplement">
-      <div class="task-icon" aria-hidden="true">✚</div>
+    <article class="task-card supplement no-icon supplement-only">
+
       <div class="task-copy">
-        <p class="eyebrow">每日补充剂</p>
-        <h3>一水肌酸</h3>
-        <p>每日1次；白天服用（随餐即可）</p>
+        <div class="task-heading"><h3>一水肌酸</h3></div>
+
       </div>
       <div class="task-meta">
-        <span class="due-badge">每天</span>
+
         <label class="task-check">
           <input type="checkbox" data-care-task
             data-care-kind="supplement"
             data-care-id="S0003"
             data-care-name="一水肌酸"
-            data-care-action="服用">
-          <span>已完成</span>
+            data-care-action="服用"
+            aria-label="标记一水肌酸服用已完成">
+          <span data-task-state>完成</span>
         </label>
       </div>
     </article></div>
 
         <section class="receipt-card" id="receipt" aria-labelledby="receipt-title">
           <div class="receipt-intro">
-            <p class="kicker dark">CARE RECEIPT</p>
-            <h2 id="receipt-title">做完了，告诉我。</h2>
-            <p>勾选上面的“已完成”，也可以像聊天一样补一句。网页只在本机整理成一句话，不上传数据。</p>
+            <div><p class="kicker dark">CARE RECEIPT</p><h2 id="receipt-title">完成回执</h2></div>
+            <p>可以分几次完成；每次只生成新增项目，完成状态会保存在这台设备。</p>
           </div>
           <form data-care-receipt data-repository="NoraLigithub/plant-care" data-default-date="2026-08-06">
             <div class="receipt-toolbar">
+              <div class="selection-summary" aria-live="polite" data-selected-summary>0 项已完成</div>
               <label>
                 <span>操作日期</span>
                 <input type="date" name="care-date" value="2026-08-06" required data-care-date>
               </label>
-              <div class="selection-summary" aria-live="polite" data-selected-summary>还没有勾选任务</div>
             </div>
             <label class="note-field" for="care-note">
               <span>文字补充</span>
-              <textarea id="care-note" name="care-note" maxlength="1200" rows="4" data-care-note placeholder="例如：茉莉浸盆了；紫苏水仓还是满的没加；文竹有两片黄叶。"></textarea>
+              <textarea id="care-note" name="care-note" maxlength="1200" rows="2" data-care-note placeholder="例如：紫苏水仓还是满的；文竹有两片黄叶。"></textarea>
             </label>
             <label class="note-field generated-receipt" data-generated-receipt hidden>
               <span>生成的一句话</span>
               <textarea rows="3" readonly data-generated-text></textarea>
             </label>
             <div class="receipt-actions">
-              <button class="submit-receipt" type="submit">生成一句话 <span aria-hidden="true">→</span></button>
+              <button class="submit-receipt" type="submit">生成本次回执 <span aria-hidden="true">→</span></button>
               <button class="clear-receipt" type="button" data-copy-receipt hidden>复制</button>
               <button class="clear-receipt" type="button" data-share-receipt hidden>分享到飞书</button>
-              <button class="clear-receipt" type="button" data-clear-receipt>清空</button>
+              <button class="clear-receipt" type="button" data-clear-receipt>重置今日</button>
             </div>
-            <p class="receipt-help">手机点“分享到飞书”选择现有机器人私聊；电脑点“复制”后粘贴回复每天的养护清单。我下次读取飞书消息时会照常登记。</p>
+            <p class="receipt-help">生成后分享到飞书，或复制后回复机器人私聊；发送后我才能登记到养护档案。</p>
             <p class="receipt-status" role="status" data-receipt-status></p>
           </form>
         </section>
@@ -815,7 +814,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-08-07 02:50（Asia/Shanghai）</p>
+      <p>数据生成于 2026-08-07 03:02（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>

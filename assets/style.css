@@ -303,7 +303,7 @@ h1, h2, h3, p { margin-top: 0; }
 .success-actions .undo-button { color: rgba(255, 255, 255, .72); background: rgba(255, 255, 255, .1); }
 
 .section { padding-block: 96px; scroll-margin-top: 10px; }
-.today-section { background: var(--paper); }
+.today-section { padding-block: 72px; background: var(--paper); }
 .section-heading {
   display: flex;
   align-items: end;
@@ -320,44 +320,49 @@ h1, h2, h3, p { margin-top: 0; }
   line-height: 1.08;
 }
 .section-heading > p { max-width: 430px; margin-bottom: 5px; color: #718074; font-size: 14px; }
-.task-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.task-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .task-card {
   display: grid;
-  grid-template-columns: 48px 1fr auto;
-  gap: 16px;
-  align-items: start;
-  min-height: 148px;
-  padding: 24px;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 70px;
+  padding: 10px 12px;
   border: 1px solid var(--line);
-  border-radius: 20px;
+  border-radius: 14px;
   background: #fff;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: background .18s ease, border-color .18s ease;
 }
-.task-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 .task-card.overdue { border-color: #e6c8bd; background: #fffaf7; }
 .task-card.today { border-color: #bed1b6; }
-.task-card.is-complete { opacity: .68; background: #eef5e9; }
+.task-card.no-icon { grid-template-columns: minmax(0, 1fr) auto; padding-left: 15px; }
+.task-card.is-complete { border-color: #bdd1b6; background: #eef5e9; }
 .task-card.is-complete .task-copy h3 { text-decoration: line-through; text-decoration-thickness: 1px; }
+.task-card.is-complete .task-detail { opacity: .64; }
 .task-icon {
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   color: white;
   background: var(--leaf);
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 15px;
 }
 .overdue .task-icon { background: var(--rose); }
-.supplement .task-icon { background: #667b9f; }
-.task-copy .eyebrow, .eyebrow { margin-bottom: 4px; color: #728279; font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
-.task-copy h3 { margin-bottom: 5px; font-family: ui-serif, "Songti SC", serif; font-size: 24px; }
-.task-copy p:last-child { margin-bottom: 0; color: #627269; font-size: 14px; }
-.task-meta { display: grid; justify-items: end; gap: 12px; }
-.due-badge { padding: 5px 10px; color: var(--leaf); background: #edf4e9; border-radius: 999px; font-size: 12px; font-weight: 750; white-space: nowrap; }
+.task-copy { min-width: 0; }
+.task-heading { display: flex; align-items: baseline; min-width: 0; gap: 8px; }
+.task-action { flex: 0 0 auto; color: #718078; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
+.task-copy h3 { overflow: hidden; margin: 0; font-size: 17px; font-weight: 720; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.task-detail { overflow: hidden; margin: 3px 0 0; color: #627269; font-size: 12px; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.task-meta { display: flex; align-items: center; justify-content: end; gap: 8px; }
+.due-badge { padding: 3px 7px; color: var(--leaf); background: #edf4e9; border-radius: 999px; font-size: 10px; font-weight: 750; white-space: nowrap; }
 .overdue .due-badge { color: var(--rose); background: #f8e7e1; }
-.task-check { position: relative; display: inline-flex; align-items: center; gap: 7px; cursor: pointer; color: var(--ink-soft); font-size: 13px; font-weight: 720; white-space: nowrap; }
-.task-check input { width: 19px; height: 19px; margin: 0; accent-color: var(--leaf); cursor: pointer; }
+.task-check { position: relative; display: inline-flex; align-items: center; gap: 5px; cursor: pointer; color: var(--ink-soft); font-size: 11px; font-weight: 750; white-space: nowrap; }
+.task-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--leaf); cursor: pointer; }
+.task-card.is-receipted .task-check { color: #668071; }
+.supplement-only { min-height: 48px; background: #f8faf6; }
+.supplement-only .task-copy h3 { font-size: 15px; }
 .empty-state {
   grid-column: 1 / -1;
   display: flex;
@@ -395,18 +400,18 @@ h1, h2, h3, p { margin-top: 0; }
 .subtle { margin: 18px 0; color: rgba(255, 255, 255, .64); }
 
 .receipt-card {
-  display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-  gap: 54px;
-  margin-top: 24px;
-  padding: 42px;
+  margin-top: 16px;
+  padding: 18px 20px;
   border: 1px solid #cfdbca;
-  border-radius: var(--radius);
+  border-radius: 18px;
   background: linear-gradient(145deg, #f0f6ec, #fffdf7 68%);
 }
-.receipt-intro h2 { margin-bottom: 18px; font-family: ui-serif, "Songti SC", serif; font-size: clamp(36px, 4vw, 50px); font-weight: 550; letter-spacing: -.04em; line-height: 1.08; }
-.receipt-intro > p:last-child { max-width: 430px; margin-bottom: 0; color: #65766c; }
-.receipt-toolbar { display: grid; grid-template-columns: 160px 1fr; gap: 14px; align-items: end; margin-bottom: 18px; }
+.receipt-intro { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 12px; }
+.receipt-intro > div { display: flex; align-items: baseline; gap: 12px; }
+.receipt-intro .kicker { margin-bottom: 0; }
+.receipt-intro h2 { margin: 0; font-family: ui-serif, "Songti SC", serif; font-size: 27px; font-weight: 600; letter-spacing: -.03em; line-height: 1.08; }
+.receipt-intro > p:last-child { max-width: 560px; margin-bottom: 0; color: #65766c; font-size: 12px; }
+.receipt-toolbar { display: grid; grid-template-columns: 1fr 150px; gap: 10px; align-items: end; margin-bottom: 10px; }
 .receipt-toolbar label, .note-field { display: grid; gap: 7px; color: #596c61; font-size: 12px; font-weight: 750; }
 .receipt-toolbar input, .note-field textarea {
   width: 100%;
@@ -417,17 +422,17 @@ h1, h2, h3, p { margin-top: 0; }
   outline: 0;
   font: inherit;
 }
-.receipt-toolbar input { min-height: 45px; padding: 10px 12px; }
-.note-field textarea { min-height: 116px; padding: 13px 14px; resize: vertical; line-height: 1.6; }
+.receipt-toolbar input { min-height: 40px; padding: 8px 10px; }
+.note-field textarea { min-height: 64px; padding: 10px 12px; resize: vertical; line-height: 1.45; }
 .receipt-toolbar input:focus, .note-field textarea:focus { border-color: var(--leaf); box-shadow: 0 0 0 3px rgba(49, 113, 83, .12); }
-.selection-summary { min-height: 45px; padding: 11px 14px; color: #53675b; background: #e6efe1; border-radius: 13px; font-size: 13px; }
-.receipt-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
-.submit-receipt, .clear-receipt { min-height: 46px; padding: 11px 17px; border: 0; border-radius: 999px; font: inherit; font-weight: 750; cursor: pointer; }
+.selection-summary { min-height: 40px; padding: 9px 12px; color: #53675b; background: #e6efe1; border-radius: 11px; font-size: 12px; }
+.receipt-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.submit-receipt, .clear-receipt { min-height: 38px; padding: 8px 14px; border: 0; border-radius: 999px; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
 .submit-receipt { display: inline-flex; align-items: center; gap: 14px; color: white; background: var(--forest); }
 .submit-receipt:hover { background: #1c4d39; }
 .clear-receipt { color: var(--ink-soft); background: #e7ece3; }
-.receipt-help, .receipt-status { margin: 12px 0 0; color: #77857d; font-size: 11px; }
-.receipt-status { min-height: 18px; color: var(--rose); font-weight: 700; }
+.receipt-help, .receipt-status { margin: 8px 0 0; color: #77857d; font-size: 10px; }
+.receipt-status { min-height: 16px; color: var(--rose); font-weight: 700; }
 
 .collection-section { background: var(--cream); }
 .item-section { background: #e8eee3; }
@@ -490,7 +495,6 @@ footer { padding-block: 34px; color: rgba(255, 255, 255, .7); background: #0c2a2
   .hero-summary { display: none; }
   .entity-grid, .item-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .upcoming { grid-template-columns: 1fr; gap: 12px; }
-  .receipt-card { grid-template-columns: 1fr; gap: 28px; }
   .meditation-stats { grid-template-columns: repeat(2, 1fr); }
   .meditation-insights { grid-template-columns: 1fr; }
 }
@@ -506,15 +510,30 @@ footer { padding-block: 34px; color: rgba(255, 255, 255, .7); background: #0c2a2
   .meditation-cta { width: 100%; }
   .hero-secondary { width: 100%; padding-left: 4px; }
   .section { padding-block: 68px; }
+  .today-section { padding-block: 44px; }
   .section-heading, .collection-heading { align-items: stretch; flex-direction: column; }
+  .today-section .section-heading { gap: 8px; margin-bottom: 16px; }
+  .today-section .section-heading h2 { font-size: 38px; }
+  .today-section .section-heading > p { margin-bottom: 0; font-size: 12px; }
   .task-grid, .entity-grid, .item-grid { grid-template-columns: 1fr; }
-  .task-card { grid-template-columns: 44px 1fr; }
-  .task-icon { width: 44px; height: 44px; }
-  .task-meta { grid-column: 2; grid-row: 2; justify-items: start; grid-auto-flow: column; align-items: center; }
+  .task-grid { gap: 6px; }
+  .task-card { grid-template-columns: 30px minmax(0, 1fr) auto; min-height: 58px; padding: 8px 10px; gap: 8px; }
+  .task-card.no-icon { grid-template-columns: minmax(0, 1fr) auto; padding-left: 12px; }
+  .task-icon { width: 28px; height: 28px; font-size: 13px; }
+  .task-meta { flex-direction: column; align-items: end; gap: 3px; }
+  .task-copy h3 { font-size: 16px; }
+  .task-detail { font-size: 11px; }
+  .supplement-only { min-height: 44px; }
   .due-badge { width: fit-content; }
   .upcoming { padding: 24px; }
-  .receipt-card { padding: 26px 22px; }
-  .receipt-toolbar { grid-template-columns: 1fr; }
+  .receipt-card { margin-top: 12px; padding: 14px; }
+  .receipt-intro { display: block; margin-bottom: 10px; }
+  .receipt-intro > div { margin-bottom: 4px; }
+  .receipt-intro h2 { font-size: 24px; }
+  .receipt-intro > p:last-child { font-size: 11px; }
+  .receipt-toolbar { grid-template-columns: minmax(0, 1fr) 126px; gap: 7px; }
+  .receipt-toolbar label { gap: 4px; }
+  .receipt-toolbar input { padding-inline: 7px; font-size: 11px; }
   .meditation-connect-card { grid-template-columns: 54px 1fr; padding: 22px; }
   .connect-orb { width: 54px; height: 54px; }
   .meditation-connect-card button { grid-column: 2; width: fit-content; }

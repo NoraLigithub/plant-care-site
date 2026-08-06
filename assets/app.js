@@ -45,6 +45,7 @@ if (receiptForm) {
   const generatedText = receiptForm.querySelector("[data-generated-text]");
   const defaultDate = receiptForm.dataset.defaultDate;
   const storageKey = `plant-care-receipt:${defaultDate}`;
+  const receiptedTasks = new Set();
 
   const taskKey = (input) => [
     input.dataset.careKind,
@@ -53,6 +54,9 @@ if (receiptForm) {
   ].join(":");
 
   const selectedTasks = () => taskInputs.filter((input) => input.checked);
+  const pendingTasks = () => selectedTasks().filter(
+    (input) => !receiptedTasks.has(taskKey(input)),
+  );
 
   const invalidateSentence = () => {
     if (generatedPanel) generatedPanel.hidden = true;
@@ -64,17 +68,30 @@ if (receiptForm) {
 
   const updateCardState = (input) => {
     const card = input.closest(".task-card");
-    if (card) card.classList.toggle("is-complete", input.checked);
+    const isReceipted = input.checked && receiptedTasks.has(taskKey(input));
+    if (card) {
+      card.classList.toggle("is-complete", input.checked);
+      card.classList.toggle("is-receipted", isReceipted);
+    }
+    const state = input.closest(".task-check")?.querySelector("[data-task-state]");
+    if (state) {
+      state.textContent = isReceipted ? "已生成" : input.checked ? "已完成" : "完成";
+    }
   };
 
   const updateSummary = () => {
     const selected = selectedTasks();
+    const pending = pendingTasks();
     if (summary) {
-      summary.textContent = selected.length
-        ? `已勾选 ${selected.length} 项：${selected.map((input) => input.dataset.careName).join("、")}`
-        : taskInputs.length
-          ? "还没有勾选任务"
-          : "今天没有预设任务，可以直接写文字补充";
+      if (!taskInputs.length) {
+        summary.textContent = "今天没有预设任务，可以直接写文字补充";
+      } else if (!selected.length) {
+        summary.textContent = `0 / ${taskInputs.length} 项已完成`;
+      } else if (pending.length) {
+        summary.textContent = `${selected.length} / ${taskInputs.length} 项已完成 · ${pending.length} 项待生成`;
+      } else {
+        summary.textContent = `${selected.length} / ${taskInputs.length} 项已完成 · 回执已生成`;
+      }
     }
     taskInputs.forEach(updateCardState);
   };
@@ -84,6 +101,7 @@ if (receiptForm) {
       date: dateInput?.value || defaultDate,
       note: noteInput?.value || "",
       tasks: selectedTasks().map(taskKey),
+      receipted: [...receiptedTasks],
     };
     try {
       localStorage.setItem(storageKey, JSON.stringify(draft));
@@ -98,6 +116,7 @@ if (receiptForm) {
       if (dateInput && draft.date) dateInput.value = draft.date;
       if (noteInput && draft.note) noteInput.value = draft.note;
       const savedTasks = new Set(draft.tasks || []);
+      for (const key of draft.receipted || []) receiptedTasks.add(key);
       taskInputs.forEach((input) => {
         input.checked = savedTasks.has(taskKey(input));
       });
@@ -108,6 +127,7 @@ if (receiptForm) {
 
   taskInputs.forEach((input) => {
     input.addEventListener("change", () => {
+      if (!input.checked) receiptedTasks.delete(taskKey(input));
       updateSummary();
       saveDraft();
       invalidateSentence();
@@ -126,6 +146,7 @@ if (receiptForm) {
     taskInputs.forEach((input) => {
       input.checked = false;
     });
+    receiptedTasks.clear();
     if (noteInput) noteInput.value = "";
     if (dateInput) dateInput.value = defaultDate;
     try {
@@ -133,7 +154,7 @@ if (receiptForm) {
     } catch (_error) {
       // 同上，无法访问本地存储不影响清空当前表单。
     }
-    if (status) status.textContent = "已清空。";
+    if (status) status.textContent = "今天的本机完成状态已重置。";
     if (generatedPanel) generatedPanel.hidden = true;
     if (generatedText) generatedText.value = "";
     if (copyButton) copyButton.hidden = true;
@@ -186,13 +207,17 @@ if (receiptForm) {
 
   receiptForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const selected = selectedTasks();
+    const selected = pendingTasks();
     const note = noteInput?.value.trim() || "";
     const careDate = dateInput?.value || defaultDate;
 
     if (!selected.length && !note) {
-      if (status) status.textContent = "请至少勾选一项，或者写一句补充。";
-      noteInput?.focus();
+      if (status) {
+        status.textContent = selectedTasks().length
+          ? "已完成项目都生成过回执了；可以再勾选新项目或写一句补充。"
+          : "请至少完成一项，或者写一句补充。";
+      }
+      if (!selectedTasks().length) noteInput?.focus();
       return;
     }
 
@@ -201,12 +226,17 @@ if (receiptForm) {
     const sentence = actionText
       ? `${careDate}：${actionText}。${note ? `补充：${note}` : ""}`
       : `${careDate}：${note}`;
+    selected.forEach((input) => receiptedTasks.add(taskKey(input)));
+    if (noteInput) noteInput.value = "";
     saveDraft();
+    updateSummary();
     if (generatedText) generatedText.value = sentence;
     if (generatedPanel) generatedPanel.hidden = false;
     if (copyButton) copyButton.hidden = false;
     if (shareButton) shareButton.hidden = typeof navigator.share !== "function";
-    if (status) status.textContent = "一句话已生成。";
+    if (status) status.textContent = selected.length
+      ? `已生成 ${selected.length} 个新增完成项目。`
+      : "文字回执已生成。";
   });
 
   updateSummary();
