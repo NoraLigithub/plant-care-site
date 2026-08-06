@@ -1,3 +1,17 @@
+const LIFE_DAY_START_HOUR = 6;
+
+const localLifeDate = (now = new Date()) => {
+  const shifted = new Date(now.valueOf() - LIFE_DAY_START_HOUR * 60 * 60 * 1000);
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(shifted);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+};
+
 document.querySelectorAll("[data-filter-input]").forEach((input) => {
   const listId = input.dataset.filterInput;
   const list = document.getElementById(listId);
@@ -221,18 +235,7 @@ if (meditationApp) {
   let lastDailyMessage = "";
   let returnFocus = null;
 
-  const localDate = () => {
-    const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: "Asia/Shanghai",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    }).formatToParts(new Date());
-    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-    return `${values.year}-${values.month}-${values.day}`;
-  };
-
-  const today = localDate();
+  const today = localLifeDate();
   if (dateInput) {
     dateInput.value = today;
     dateInput.max = today;
