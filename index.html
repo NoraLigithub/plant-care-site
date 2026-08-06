@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173b2c">
+  <meta name="description" content="家庭植物与物品养护看板">
+  <title>我的养护花园</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#today">跳到今天的任务</a>
+  <header class="hero">
+    <nav class="nav shell" aria-label="页面导航">
+      <a class="brand" href="#top" aria-label="回到顶部"><span aria-hidden="true">⌇</span> 养护花园</a>
+      <div class="nav-links">
+        <a href="#today">今天</a>
+        <a href="#plants">植物</a>
+        <a href="#items">物品</a>
+      </div>
+    </nav>
+    <div class="hero-inner shell" id="top">
+      <div class="hero-copy">
+        <p class="kicker">MY CARE GARDEN · 2026-08-06</p>
+        <h1>今天，把家里<br>照顾得刚刚好。</h1>
+        <p class="hero-date">2026 年 8 月 6 日 · 星期四</p>
+        <a class="primary-button" href="#today">查看今天要做什么 <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="hero-summary" aria-label="养护概览">
+        <div class="summary-orbit orbit-one" aria-hidden="true"></div>
+        <div class="summary-orbit orbit-two" aria-hidden="true"></div>
+        <p>今日养护</p>
+        <strong>1</strong>
+        <span>项任务</span>
+      </div>
+    </div>
+    <div class="hero-leaf leaf-one" aria-hidden="true"></div>
+    <div class="hero-leaf leaf-two" aria-hidden="true"></div>
+  </header>
+
+  <main>
+    <section class="section today-section" id="today">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="kicker dark">TODAY</p><h2>今天要做</h2></div>
+          <p>到期日是检查提示；浇水前先确认盆土确实需要水。</p>
+        </div>
+        <div class="task-grid">
+    <article class="task-card today">
+      <div class="task-icon" aria-hidden="true">⌂</div>
+      <div class="task-copy">
+        <p class="eyebrow">换水并冲洗水盆</p>
+        <h3>猫水盆（客厅）</h3>
+        <p>位置：客厅</p>
+      </div>
+      <span class="due-badge">今天</span>
+    </article></div>
+
+        <aside class="upcoming" aria-labelledby="upcoming-title">
+          <div class="upcoming-title">
+            <p class="eyebrow">NEXT 7 DAYS</p>
+            <h3 id="upcoming-title">后面几天</h3>
+          </div>
+          <div class="upcoming-list">
+            <div class="upcoming-row">
+              <time datetime="2026-08-07"><strong>08.07</strong><span>周五</span></time>
+              <ul><li>浇水 · 茉莉花</li></ul>
+            </div>
+
+            <div class="upcoming-row">
+              <time datetime="2026-08-08"><strong>08.08</strong><span>周六</span></time>
+              <ul><li>浇水 · 大绿萝</li><li>浇水 · 幸福树</li><li>浇水 · 文竹</li><li>浇水 · 珍珠如意</li><li>浇水 · 青苹果竹芋</li><li>浇水 · 小绿萝</li><li>浇水 · 棕竹</li><li>浇水 · 散尾葵</li><li>浇水 · 小叶赤楠</li><li>浇水 · 三角梅</li><li>浇水 · 四季桂花</li><li>施肥 · 幸福树</li></ul>
+            </div>
+
+            <div class="upcoming-row">
+              <time datetime="2026-08-09"><strong>08.09</strong><span>周日</span></time>
+              <ul><li>浇水 · 多肉</li><li>施肥 · 大绿萝</li><li>施肥 · 珍珠如意</li><li>施肥 · 青苹果竹芋</li><li>施肥 · 小绿萝</li></ul>
+            </div>
+
+            <div class="upcoming-row">
+              <time datetime="2026-08-11"><strong>08.11</strong><span>周二</span></time>
+              <ul><li>浇水 · 一帆风顺</li></ul>
+            </div>
+
+            <div class="upcoming-row">
+              <time datetime="2026-08-12"><strong>08.12</strong><span>周三</span></time>
+              <ul><li>施肥 · 一帆风顺</li></ul>
+            </div>
+
+            <div class="upcoming-row">
+              <time datetime="2026-08-13"><strong>08.13</strong><span>周四</span></time>
+              <ul><li>浇水 · 紫苏</li><li>浇水 · 甜罗勒</li><li>浇水 · 迷迭香</li><li>浇水 · 百里香</li></ul>
+            </div></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section collection-section" id="plants">
+      <div class="shell">
+        <div class="section-heading collection-heading">
+          <div><p class="kicker dark">PLANTS · 18</p><h2>我的植物</h2></div>
+          <label class="search-field">
+            <span class="sr-only">搜索植物</span>
+            <span aria-hidden="true">⌕</span>
+            <input type="search" placeholder="按名称、位置或状态搜索" data-filter-input="plant-list">
+          </label>
+        </div>
+        <div class="entity-grid" id="plant-list" data-filter-list>
+            <article class="entity-card plant-card" data-search="p0001 茉莉花 茉莉（jasminum sambac，具体品种待确认） 同一阳台西侧 健康">
+              <figure><img src="assets/photos/P0001.jpg" alt="茉莉花" loading="lazy" decoding="async"><figcaption>P0001</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">茉莉（Jasminum sambac，具体品种待确认）</p><h3>茉莉花</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>同一阳台西侧</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-07 · 1 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-31 · 25 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>浸盆5分钟后取出沥干</dd></div>
+                  <div><dt>光照</dt><dd>充足光照；盛夏避开最强午后西晒</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>2026-08-01</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0002 大绿萝 绿萝／黄金葛（epipremnum aureum） 同一阳台西侧 观察中">
+              <figure><img src="assets/photos/P0002.jpg" alt="大绿萝" loading="lazy" decoding="async"><figcaption>P0002</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">绿萝／黄金葛（Epipremnum aureum）</p><h3>大绿萝</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>同一阳台西侧</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-09 · 3 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面浇透</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光；避免午后西晒</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-03</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0003 紫苏 紫苏（perilla frutescens var. crispa） 阳台北花架高层 观察中">
+              <figure><img src="assets/photos/P0003.jpg" alt="紫苏" loading="lazy" decoding="async"><figcaption>P0003</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">紫苏（Perilla frutescens var. crispa）</p><h3>紫苏</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北花架高层</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-13 · 7 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-15 · 40 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>懒人盆加水仓</dd></div>
+                  <div><dt>光照</dt><dd>全日照至半日照</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0004 幸福树 幸福树／菜豆树（radermachera sinica） 阳台北面地上 观察中">
+              <figure><img src="assets/photos/P0004.jpg" alt="幸福树" loading="lazy" decoding="async"><figcaption>P0004</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">幸福树／菜豆树（Radermachera sinica）</p><h3>幸福树</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北面地上</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-08 · 2 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>取出内盆土面缓慢浇透，沥水后放回外盆（外盆不积水）</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光；避免强直射和西晒</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0005 甜罗勒 甜罗勒（ocimum basilicum） 阳台北花架高层 健康">
+              <figure><img src="assets/photos/P0005.jpg" alt="甜罗勒" loading="lazy" decoding="async"><figcaption>P0005</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">甜罗勒（Ocimum basilicum）</p><h3>甜罗勒</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北花架高层</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-13 · 7 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-15 · 40 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>懒人盆加水仓</dd></div>
+                  <div><dt>光照</dt><dd>充足光照</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0006 迷迭香 迷迭香（salvia rosmarinus） 阳台北花架高层 健康">
+              <figure><img src="assets/photos/P0006.jpg" alt="迷迭香" loading="lazy" decoding="async"><figcaption>P0006</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">迷迭香（Salvia rosmarinus）</p><h3>迷迭香</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北花架高层</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-13 · 7 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-15 · 40 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>懒人盆加水仓</dd></div>
+                  <div><dt>光照</dt><dd>充足日照，通风良好</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0007 百里香 百里香（thymus vulgaris） 阳台北花架高层 观察中">
+              <figure><img src="assets/photos/P0007.jpg" alt="百里香" loading="lazy" decoding="async"><figcaption>P0007</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">百里香（Thymus vulgaris）</p><h3>百里香</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北花架高层</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-13 · 7 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-15 · 40 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>懒人盆加水仓</dd></div>
+                  <div><dt>光照</dt><dd>充足日照，通风良好</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0008 文竹 文竹（asparagus setaceus） 客厅架子上 观察中">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0008</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">文竹（Asparagus setaceus）</p><h3>文竹</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>客厅架子上</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-22 · 47 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>浸盆约3分钟沥干</dd></div>
+                  <div><dt>光照</dt><dd>散光明亮处，通风良好</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0009 珍珠如意 珍珠如意（学名待确认，外形近 aglaonema） 阳台北面 健康">
+              <figure><img src="assets/photos/P0009.jpg" alt="珍珠如意" loading="lazy" decoding="async"><figcaption>P0009</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">珍珠如意（学名待确认，外形近 Aglaonema）</p><h3>珍珠如意</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北面</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-09 · 3 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面浇透，倒托盘积水</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，避免强直射</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0010 青苹果竹芋 青苹果竹芋（goeppertia orbifolia） 阳台北花架低层 健康">
+              <figure><img src="assets/photos/P0010.jpg" alt="青苹果竹芋" loading="lazy" decoding="async"><figcaption>P0010</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">青苹果竹芋（Goeppertia orbifolia）</p><h3>青苹果竹芋</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北花架低层</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-09 · 3 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面浇透，倒托盘积水</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，避免强直射</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0011 小绿萝 绿萝／黄金葛（epipremnum aureum） 阳台北花架低层 健康">
+              <figure><img src="assets/photos/P0011.jpg" alt="小绿萝" loading="lazy" decoding="async"><figcaption>P0011</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">绿萝／黄金葛（Epipremnum aureum）</p><h3>小绿萝</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北花架低层</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-09 · 3 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面浇透</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，避免强直射</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-03</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0012 尤加利叶 尤加利／桉（eucalyptus，干切枝装饰） 待补充 无需养护">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0012</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">尤加利／桉（Eucalyptus，干切枝装饰）</p><h3>尤加利叶</h3></div>
+                  <span class="status neutral">无需养护</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>待补充</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="neutral">不参与提醒</strong></div>
+                  <div><span>下次施肥</span><strong class="neutral">未设置</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>待补充</dd></div>
+                  <div><dt>光照</dt><dd>待补充</dd></div>
+                  <div><dt>最近浇水</dt><dd>暂无</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0013 棕竹 棕竹（rhapis excelsa） 客厅靠阳台玻璃门旁 观察中">
+              <figure><img src="assets/photos/P0013.jpg" alt="棕竹" loading="lazy" decoding="async"><figcaption>P0013</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">棕竹（Rhapis excelsa）</p><h3>棕竹</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>客厅靠阳台玻璃门旁</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-24 · 18 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面浇透沥干</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，避免盛夏强烈直射</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-03</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0014 散尾葵 散尾葵（dypsis lutescens） 阳台北面 观察中">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0014</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">散尾葵（Dypsis lutescens）</p><h3>散尾葵</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北面</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-24 · 18 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土面浇透沥干</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，避免盛夏强烈直射</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-03</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0015 小叶赤楠 赤楠（syzygium buxifolium，商品名“小叶赤楠”） 客厅架子上 观察中">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0015</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">赤楠（Syzygium buxifolium，商品名“小叶赤楠”）</p><h3>小叶赤楠</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>客厅架子上</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-24 · 18 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>盆口浇透或浸盆5分钟晾干</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光、通风良好；适应后再逐步增加柔和日照</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0016 三角梅 三角梅／叶子花（bougainvillea spp.，具体品种待确认） 阳台北面 观察中">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0016</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">三角梅／叶子花（Bougainvillea spp.，具体品种待确认）</p><h3>三角梅</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北面</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-24 · 18 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>夏季浸盆3-5分钟；秋冬见干浇头</dd></div>
+                  <div><dt>光照</dt><dd>充足光照；到货缓苗后逐步适应直射日光</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0017 四季桂花 四季桂（osmanthus fragrans var. semperflorens，具体品种待确认） 阳台北面 观察中">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0017</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">四季桂（Osmanthus fragrans var. semperflorens，具体品种待确认）</p><h3>四季桂花</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北面</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-08 · 2 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-24 · 18 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>盆口浇透至盆底出水，或浸盆5分钟晾干</dd></div>
+                  <div><dt>光照</dt><dd>有阳光处，避免暴晒（商家）</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-08-05</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0018 多肉 多肉植物（莲座型，具体品种待确认） 卧室 观察中">
+              <figure><img src="assets/photos/P0018.jpg" alt="多肉" loading="lazy" decoding="async"><figcaption>P0018</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">多肉植物（莲座型，具体品种待确认）</p><h3>多肉</h3></div>
+                  <span class="status watching">观察中</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>卧室</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-09 · 3 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">09-15 · 40 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>土完全干透后浇透，盆底出水后沥干，不留积水</dd></div>
+                  <div><dt>光照</dt><dd>充足明亮光照，夏季避免暴晒</dd></div>
+                  <div><dt>最近浇水</dt><dd>2026-07-28</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card plant-card" data-search="p0019 一帆风顺 白掌（spathiphyllum） 阳台北侧 健康">
+              <figure><div class="plant-placeholder" aria-hidden="true">⌇</div><figcaption>P0019</figcaption></figure>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">白掌（Spathiphyllum）</p><h3>一帆风顺</h3></div>
+                  <span class="status healthy">健康</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>阳台北侧</p>
+                <div class="due-pair">
+                  <div><span>下次浇水</span><strong class="soon">08-11 · 5 天后</strong></div>
+                  <div><span>下次施肥</span><strong class="soon">08-12 · 6 天后</strong></div>
+                </div>
+                <dl>
+                  <div><dt>浇水方法</dt><dd>自吸水盆看水仓，空了加水</dd></div>
+                  <div><dt>光照</dt><dd>明亮散射光，耐阴</dd></div>
+                  <div><dt>最近浇水</dt><dd>暂无</dd></div>
+                  <div><dt>最近施肥</dt><dd>暂无</dd></div>
+                </dl>
+              </div>
+            </article></div>
+        <p class="filter-empty" data-filter-empty="plant-list" hidden>没有找到匹配的植物。</p>
+      </div>
+    </section>
+
+    <section class="section item-section" id="items">
+      <div class="shell">
+        <div class="section-heading collection-heading">
+          <div><p class="kicker dark">HOME ITEMS · 3</p><h2>家居物品</h2></div>
+          <label class="search-field">
+            <span class="sr-only">搜索物品</span>
+            <span aria-hidden="true">⌕</span>
+            <input type="search" placeholder="按名称、位置或状态搜索" data-filter-input="item-list">
+          </label>
+        </div>
+        <div class="entity-grid item-grid" id="item-list" data-filter-list>
+            <article class="entity-card item-card" data-search="h0001 驱蚊液（卧室） 消耗品 卧室 在用">
+              <div class="item-mark" aria-hidden="true">⌂</div>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">H0001 · 消耗品</p><h3>驱蚊液（卧室）</h3></div>
+                  <span class="status healthy">在用</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>卧室</p>
+                <div class="item-next"><span>下次更换药液</span><strong class="soon">08-26 · 20 天后</strong></div>
+                <dl>
+                  <div><dt>维护动作</dt><dd>更换药液</dd></div>
+                  <div><dt>提醒周期</dt><dd>30 天</dd></div>
+                  <div><dt>最近完成</dt><dd>暂无</dd></div>
+                  <div><dt>启用日期</dt><dd>2026-07-27</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card item-card" data-search="h0002 驱蚊液（客厅） 消耗品 客厅 在用">
+              <div class="item-mark" aria-hidden="true">⌂</div>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">H0002 · 消耗品</p><h3>驱蚊液（客厅）</h3></div>
+                  <span class="status healthy">在用</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>客厅</p>
+                <div class="item-next"><span>下次更换药液</span><strong class="soon">08-26 · 20 天后</strong></div>
+                <dl>
+                  <div><dt>维护动作</dt><dd>更换药液</dd></div>
+                  <div><dt>提醒周期</dt><dd>30 天</dd></div>
+                  <div><dt>最近完成</dt><dd>暂无</dd></div>
+                  <div><dt>启用日期</dt><dd>2026-07-27</dd></div>
+                </dl>
+              </div>
+            </article>
+
+            <article class="entity-card item-card" data-search="h0003 猫水盆（客厅） 宠物用品 客厅 在用">
+              <div class="item-mark" aria-hidden="true">⌂</div>
+              <div class="entity-body">
+                <div class="entity-heading">
+                  <div><p class="eyebrow">H0003 · 宠物用品</p><h3>猫水盆（客厅）</h3></div>
+                  <span class="status healthy">在用</span>
+                </div>
+                <p class="location"><span aria-hidden="true">⌖</span>客厅</p>
+                <div class="item-next"><span>下次换水并冲洗水盆</span><strong class="today">08-06 · 今天</strong></div>
+                <dl>
+                  <div><dt>维护动作</dt><dd>换水并冲洗水盆</dd></div>
+                  <div><dt>提醒周期</dt><dd>1 天</dd></div>
+                  <div><dt>最近完成</dt><dd>2026-08-05</dd></div>
+                  <div><dt>启用日期</dt><dd>2026-08-02</dd></div>
+                </dl>
+              </div>
+            </article></div>
+        <p class="filter-empty" data-filter-empty="item-list" hidden>没有找到匹配的物品。</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div><span aria-hidden="true">⌇</span><strong>养护花园</strong></div>
+      <p>数据生成于 2026-08-06 22:53（Asia/Shanghai）</p>
+    </div>
+  </footer>
+</body>
+</html>
