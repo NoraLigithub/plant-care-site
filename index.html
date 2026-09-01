@@ -42,7 +42,7 @@
             <span aria-hidden="true">→</span>
           </button>
         </div>
-        <p class="sync-state" data-sync-state aria-live="polite">私人记录尚未连接</p>
+        <p class="sync-state" data-sync-state aria-live="polite">正在读取私人记录</p>
       </div>
       <div class="hero-summary" aria-label="本周节律概览">
         <div class="summary-orbit orbit-one" aria-hidden="true"></div>
@@ -61,16 +61,16 @@
       <div class="shell">
         <div class="section-heading meditation-heading">
           <div><p class="kicker dark">DAILY RHYTHM</p><h2>今天想守住的小事</h2></div>
-          <p>勾下去就算完成。记录先进入 Cloudflare 私人数据库，再自动备份到私仓。</p>
+          <p>在私人页面勾下去就会保存，再自动备份到私仓。</p>
         </div>
 
-        <div class="meditation-connect-card" data-activity-locked>
+        <div class="meditation-connect-card" data-activity-locked hidden>
           <div class="connect-orb" aria-hidden="true">◌</div>
           <div>
-            <h3>连接私人记录</h3>
-            <p>首次输入一次同步口令，以后打坐、读咒和养护 Todo 都会跨设备保存。</p>
+            <h3>记录请到私人页面</h3>
+            <p>公开页面只查看；打坐、读咒和养护记录都在私人页面直接保存。</p>
           </div>
-          <button type="button" data-connect-private>连接</button>
+          <a href="https://daily-garden.pages.dev#rituals" data-private-site-link>打开私人页面</a>
         </div>
 
         <div class="meditation-dashboard ritual-dashboard" data-activity-dashboard hidden>
@@ -511,12 +511,15 @@
             </label>
             <div class="receipt-actions">
               <button class="submit-receipt" type="submit" data-submit-care>保存本次记录 <span aria-hidden="true">→</span></button>
-              <button class="clear-receipt" type="button" data-connect-care hidden>连接私人同步</button>
               <button class="clear-receipt" type="button" data-clear-receipt>清除未提交</button>
             </div>
             <p class="receipt-help">断网时会先存在本机，恢复网络后自动保存。</p>
             <p class="receipt-status" role="status" data-receipt-status></p>
           </form>
+          <div class="private-page-callout" data-care-private-link hidden>
+            <p>完成勾选和补充说明请到私人页面，打开后可以直接记录。</p>
+            <a href="https://daily-garden.pages.dev#today">打开私人页面</a>
+          </div>
         </section>
 
         <aside class="upcoming" aria-labelledby="upcoming-title">
@@ -1203,18 +1206,6 @@
   <div class="meditation-modal" data-activity-modal hidden role="dialog" aria-modal="true" aria-labelledby="activity-modal-title">
     <button class="modal-close" type="button" aria-label="关闭" data-close-activity>×</button>
     <div class="meditation-modal-inner">
-      <section class="meditation-step connect-step" data-activity-step="connect" hidden>
-        <p class="modal-kicker">PRIVATE SYNC</p>
-        <h2>连接你的私人记录</h2>
-        <p>同步口令只保存在这台设备，不会写进公开网页。连接后，所有 Todo 会进入 Cloudflare 私人数据库。</p>
-        <form class="connect-form" data-private-connect-form>
-          <label for="private-sync-token">同步口令</label>
-          <input id="private-sync-token" type="password" autocomplete="current-password" required data-private-token placeholder="粘贴一次即可">
-          <button type="submit">连接并继续</button>
-        </form>
-        <p class="modal-feedback" data-connect-feedback role="status"></p>
-      </section>
-
       <section class="meditation-step duration-step" data-activity-step="record" hidden>
         <div data-activity-panel="A0001">
           <p class="modal-kicker">MEDITATION LOG</p>
@@ -1268,7 +1259,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-09-01 20:30（Asia/Shanghai）</p>
+      <p>数据生成于 2026-09-01 20:51（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>

@@ -2,7 +2,10 @@ const dailyApp = document.querySelector("[data-daily-app]");
 
 if (dailyApp) {
   const apiUrl = dailyApp.dataset.apiUrl || "";
-  const tokenKey = "meditation-sync-token";
+  const privateSiteUrl = apiUrl ? `${apiUrl}/` : "";
+  const isPrivateSite = Boolean(
+    apiUrl && new URL(apiUrl, window.location.href).origin === window.location.origin,
+  );
   const cacheKey = "daily-activity-stats-cache";
   const pendingKey = "daily-activity-pending";
   const modal = document.querySelector("[data-activity-modal]");
@@ -15,7 +18,6 @@ if (dailyApp) {
   const feedback = document.querySelector("[data-activity-feedback]");
   const customForm = document.querySelector("[data-custom-duration]");
   const today = localLifeDate();
-  let syncToken = "";
   let selectedActivityId = "A0001";
   let lastRecordId = "";
   let lastRecordActivityId = "";
@@ -72,17 +74,20 @@ if (dailyApp) {
     input.value = today;
     input.max = today;
   });
-  syncToken = safeStorage.get(tokenKey) || "";
-
-  const apiRequest = async (path, options = {}, token = syncToken) => {
+  const apiRequest = async (path, options = {}) => {
     if (!apiUrl) {
-      const error = new Error("同步接口尚未发布");
+      const error = new Error("私人页面尚未发布");
       error.status = 0;
       throw error;
     }
-    const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
+    await (window.privateSessionReady || Promise.resolve(false));
+    const headers = { ...(options.headers || {}) };
     if (options.body) headers["Content-Type"] = "application/json";
-    const response = await fetch(`${apiUrl}${path}`, { ...options, headers });
+    const response = await fetch(`${apiUrl}${path}`, {
+      ...options,
+      credentials: "same-origin",
+      headers,
+    });
     let payload = {};
     try {
       payload = await response.json();
@@ -145,12 +150,12 @@ if (dailyApp) {
     if (locked) locked.hidden = true;
     if (dashboard) dashboard.hidden = false;
     if (syncState) syncState.textContent = stale
-      ? "显示上次同步数据 · 等待重新连接"
-      : "已连接 Cloudflare 私人记录";
+      ? "显示上次保存的数据 · 等待网络恢复"
+      : "私人记录已自动保存";
     safeStorage.set(cacheKey, JSON.stringify({ activities: entries, daily_message: message || publicMessage }));
   };
 
-  const showLocked = (message = "私人记录尚未连接") => {
+  const showLocked = (message = "记录请到私人页面") => {
     if (locked) locked.hidden = false;
     if (dashboard) dashboard.hidden = true;
     setText("[data-hero-meditation]", "—");
@@ -167,11 +172,11 @@ if (dailyApp) {
   };
 
   const cached = loadCache();
-  if (cached?.activities && syncToken) renderActivities(cached.activities, cached.daily_message, true);
-  else showLocked();
+  if (isPrivateSite && cached?.activities) renderActivities(cached.activities, cached.daily_message, true);
+  else if (!isPrivateSite) showLocked();
 
-  const loadActivities = async (token = syncToken) => {
-    const payload = await apiRequest(`/api/activities?as_of=${encodeURIComponent(today)}`, {}, token);
+  const loadActivities = async () => {
+    const payload = await apiRequest(`/api/activities?as_of=${encodeURIComponent(today)}`);
     const meditation = payload.activities.find((entry) => entry.activity.activity_id === "A0001");
     renderActivities(payload.activities, meditation?.daily_message || publicMessage);
     return payload;
@@ -192,18 +197,21 @@ if (dailyApp) {
     customForm?.setAttribute("hidden", "");
   };
 
-  const openModal = (activityId = selectedActivityId, forceConnect = false) => {
+  const openModal = (activityId = selectedActivityId) => {
+    if (!isPrivateSite) {
+      if (privateSiteUrl) window.location.assign(`${privateSiteUrl}#rituals`);
+      return;
+    }
     if (!modal) return;
     selectedActivityId = activityId;
     returnFocus = document.activeElement;
     modal.hidden = false;
     document.body.classList.add("modal-open");
     showActivityPanel(activityId);
-    const step = forceConnect || !syncToken || !apiUrl ? "connect" : "record";
-    showStep(step);
+    showStep("record");
     window.setTimeout(() => {
       const target = modal.querySelector(
-        `[data-activity-step="${step}"] button:not([hidden]), [data-activity-step="${step}"] input:not([hidden])`,
+        '[data-activity-step="record"] button:not([hidden]), [data-activity-step="record"] input:not([hidden])',
       );
       target?.focus();
     }, 0);
@@ -219,7 +227,6 @@ if (dailyApp) {
   document.querySelectorAll("[data-open-activity]").forEach((button) => {
     button.addEventListener("click", () => openModal(button.dataset.openActivity));
   });
-  document.querySelector("[data-connect-private]")?.addEventListener("click", () => openModal("A0001", true));
   document.querySelector("[data-close-activity]")?.addEventListener("click", closeModal);
   document.querySelector("[data-finish-activity]")?.addEventListener("click", closeModal);
   modal?.addEventListener("click", (event) => {
@@ -227,31 +234,6 @@ if (dailyApp) {
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && modal && !modal.hidden) closeModal();
-  });
-
-  document.querySelector("[data-private-connect-form]")?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const input = document.querySelector("[data-private-token]");
-    const connectFeedback = document.querySelector("[data-connect-feedback]");
-    const candidate = input?.value.trim() || "";
-    if (!apiUrl) {
-      if (connectFeedback) connectFeedback.textContent = "同步接口还没有发布，完成部署后即可连接。";
-      return;
-    }
-    if (!candidate) return;
-    if (connectFeedback) connectFeedback.textContent = "正在核对口令……";
-    try {
-      await loadActivities(candidate);
-      syncToken = candidate;
-      safeStorage.set(tokenKey, candidate);
-      document.dispatchEvent(new CustomEvent("private-sync-connected"));
-      if (input) input.value = "";
-      if (connectFeedback) connectFeedback.textContent = "";
-      showActivityPanel(selectedActivityId);
-      showStep("record");
-    } catch (error) {
-      if (connectFeedback) connectFeedback.textContent = error.status === 401 ? "口令不对，请重新输入。" : error.message;
-    }
   });
 
   const idempotencyKey = () => {
@@ -317,10 +299,9 @@ if (dailyApp) {
       applyRecordResult(result);
     } catch (error) {
       if (error.status === 401) {
-        syncToken = "";
-        safeStorage.remove(tokenKey);
-        showStep("connect");
-        setText("[data-connect-feedback]", "同步口令已失效，请重新连接。刚才的记录仍在这台设备等待同步。");
+        showActivityPanel(activityId);
+        showStep("record");
+        if (feedback) feedback.textContent = "私人记录暂时不可用，请告诉 Agent 帮你恢复。刚才的记录仍在这台设备等待保存。";
         return;
       }
       showActivityPanel(activityId);
@@ -378,7 +359,7 @@ if (dailyApp) {
   });
 
   const retryPending = async () => {
-    if (!syncToken || !apiUrl || !navigator.onLine) return;
+    if (!isPrivateSite || !apiUrl || !navigator.onLine) return;
     for (const pending of pendingRecords()) {
       try {
         await apiRequest(`/api/activities/${pending.activity_id}/records`, {
@@ -388,9 +369,7 @@ if (dailyApp) {
         savePending(pendingRecords().filter((item) => item.idempotency_key !== pending.idempotency_key));
       } catch (error) {
         if (error.status === 401) {
-          syncToken = "";
-          safeStorage.remove(tokenKey);
-          showLocked("同步口令已失效，请重新连接");
+          showLocked("私人记录暂时不可用，请告诉 Agent 帮你恢复");
         }
         return;
       }
@@ -398,20 +377,18 @@ if (dailyApp) {
     await loadActivities();
   };
 
-  if (syncToken && apiUrl) {
-    loadActivities()
+  if (isPrivateSite && apiUrl) {
+    (window.privateSessionReady || Promise.resolve(false)).then(() => loadActivities())
       .then(retryPending)
       .catch((error) => {
         if (error.status === 401) {
-          syncToken = "";
-          safeStorage.remove(tokenKey);
-          showLocked("同步口令已失效，请重新连接");
+          showLocked("私人记录暂时不可用，请告诉 Agent 帮你恢复");
         } else if (cached?.activities) {
           renderActivities(cached.activities, cached.daily_message, true);
         } else {
           showLocked("暂时无法读取私人记录");
         }
       });
-  }
+  } else if (syncState) syncState.textContent = "公开页面只查看 · 记录请到私人页面";
   window.addEventListener("online", retryPending);
 }

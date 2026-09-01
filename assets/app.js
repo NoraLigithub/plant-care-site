@@ -30,19 +30,52 @@ document.querySelectorAll("[data-filter-input]").forEach((input) => {
   });
 });
 
+const privateApiUrl = document.body.dataset.apiUrl || "";
+const isPrivateCareSite = Boolean(
+  privateApiUrl
+  && new URL(privateApiUrl, window.location.href).origin === window.location.origin,
+);
+window.privateSessionReady = Promise.resolve(false);
+if (isPrivateCareSite) {
+  const connection = new URLSearchParams(window.location.hash.slice(1));
+  const connectionToken = connection.get("connect");
+  if (connectionToken) {
+    const nextSection = ["rituals", "today"].includes(connection.get("next"))
+      ? `#${connection.get("next")}`
+      : "";
+    window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}${nextSection}`);
+    window.privateSessionReady = fetch(`${privateApiUrl}/api/session`, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { Authorization: `Bearer ${connectionToken}` },
+    }).then((response) => {
+      if (!response.ok) throw new Error("设备连接失败");
+      return true;
+    }).catch(() => false);
+  }
+}
 const receiptForm = document.querySelector("[data-care-receipt]");
+const privateCareLink = document.querySelector("[data-care-private-link]");
 
-if (receiptForm) {
+if (receiptForm && !isPrivateCareSite) {
+  receiptForm.hidden = true;
+  if (privateCareLink) privateCareLink.hidden = false;
+  document.querySelectorAll("[data-care-task]").forEach((input) => {
+    input.disabled = true;
+    const state = input.closest(".task-check")?.querySelector("[data-task-state]");
+    if (state) state.textContent = "私人页记录";
+  });
+}
+
+if (receiptForm && isPrivateCareSite) {
   const taskInputs = [...document.querySelectorAll("[data-care-task]")];
   const dateInput = receiptForm.querySelector("[data-care-date]");
   const noteInput = receiptForm.querySelector("[data-care-note]");
   const summary = receiptForm.querySelector("[data-selected-summary]");
   const status = receiptForm.querySelector("[data-receipt-status]");
   const clearButton = receiptForm.querySelector("[data-clear-receipt]");
-  const connectButton = receiptForm.querySelector("[data-connect-care]");
   const submitButton = receiptForm.querySelector("[data-submit-care]");
-  const apiUrl = document.body.dataset.apiUrl || "";
-  const tokenKey = "meditation-sync-token";
+  const apiUrl = privateApiUrl;
   const defaultDate = receiptForm.dataset.defaultDate;
   const storageKey = `plant-care-receipt:${defaultDate}`;
   const pendingKey = `plant-care-pending:${defaultDate}`;
@@ -191,15 +224,20 @@ if (receiptForm) {
     return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   };
 
-  const careRequest = async (path, options = {}, token = safeStorage.get(tokenKey) || "") => {
+  const careRequest = async (path, options = {}) => {
     if (!apiUrl) {
-      const error = new Error("私人同步接口尚未发布");
+      const error = new Error("私人页面尚未准备好");
       error.status = 0;
       throw error;
     }
-    const headers = { ...(options.headers || {}), Authorization: `Bearer ${token}` };
+    await window.privateSessionReady;
+    const headers = { ...(options.headers || {}) };
     if (options.body) headers["Content-Type"] = "application/json";
-    const response = await fetch(`${apiUrl}${path}`, { ...options, headers });
+    const response = await fetch(`${apiUrl}${path}`, {
+      ...options,
+      credentials: "same-origin",
+      headers,
+    });
     let payload = {};
     try {
       payload = await response.json();
@@ -239,14 +277,13 @@ if (receiptForm) {
   };
 
   const retryPending = async () => {
-    if (!apiUrl || !safeStorage.get(tokenKey) || !navigator.onLine) return;
+    if (!apiUrl || !navigator.onLine) return;
     const receipts = pendingReceipts();
     for (const receipt of receipts) {
       try {
         await syncReceipt(receipt);
         removePending(receipt.idempotency_key);
       } catch (error) {
-        if (error.status === 401 && connectButton) connectButton.hidden = false;
         return;
       }
     }
@@ -259,23 +296,15 @@ if (receiptForm) {
   };
 
   const refreshCompleted = async () => {
-    if (!apiUrl || !safeStorage.get(tokenKey)) {
-      if (connectButton) connectButton.hidden = false;
-      return;
-    }
+    if (!apiUrl) return;
     try {
       const operationDate = dateInput?.value || defaultDate;
       const result = await careRequest(`/api/care?date=${encodeURIComponent(operationDate)}`);
       applyCompletedKeys(result.completed_keys);
-      if (connectButton) connectButton.hidden = true;
-    } catch (error) {
-      if (error.status === 401 && connectButton) connectButton.hidden = false;
+    } catch (_error) {
+      // 登录过期或暂时断网时保留当前页面和本机草稿。
     }
   };
-
-  connectButton?.addEventListener("click", () => {
-    document.querySelector("[data-connect-private]")?.click();
-  });
 
   receiptForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -312,28 +341,22 @@ if (receiptForm) {
       removePending(receipt.idempotency_key);
       if (noteInput) noteInput.value = "";
       saveDraft();
-      if (connectButton) connectButton.hidden = true;
       if (status) status.textContent = result.backup_pending
         ? "已保存到 Cloudflare；私仓备份稍后自动补上。"
         : selected.length
           ? `已保存 ${selected.length} 个新增完成项目。`
           : "补充说明已保存，Agent 之后能看到。";
     } catch (error) {
-      if (error.status === 401 && connectButton) connectButton.hidden = false;
       if (status) status.textContent = error.status === 401
-        ? "请先连接私人同步；本次内容仍保存在这台设备。"
+        ? "私人记录暂时不可用，请告诉 Agent 帮你恢复；本次内容仍保存在这台设备。"
         : "暂时没能写入云端，内容已保存在本机，联网后会自动重试。";
     } finally {
       if (submitButton) submitButton.disabled = false;
     }
   });
 
-  document.addEventListener("private-sync-connected", () => {
-    if (connectButton) connectButton.hidden = true;
-    retryPending().then(refreshCompleted);
-  });
   window.addEventListener("online", retryPending);
   if (dateInput) dateInput.max = defaultDate;
   updateSummary();
-  retryPending().then(refreshCompleted);
+  window.privateSessionReady.then(() => retryPending().then(refreshCompleted));
 }
