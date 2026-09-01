@@ -494,8 +494,8 @@
 
         <section class="receipt-card" id="receipt" aria-labelledby="receipt-title">
           <div class="receipt-intro">
-            <div><p class="kicker dark">CARE RECEIPT</p><h2 id="receipt-title">完成回执</h2></div>
-            <p>可以分几次完成；每次只提交新增项目，也可以只写一段植物状态说明。</p>
+            <div><p class="kicker dark">CARE NOTES</p><h2 id="receipt-title">补充说明</h2></div>
+            <p>勾选今天做完的事，或补充植物状态和其他情况；保存后 Agent 之后能看到。</p>
           </div>
           <form data-care-receipt data-repository="NoraLigithub/plant-care" data-default-date="2026-09-01">
             <div class="receipt-toolbar">
@@ -506,15 +506,15 @@
               </label>
             </div>
             <label class="note-field" for="care-note">
-              <span>文字补充</span>
+              <span>补充说明（Agent 之后能看到）</span>
               <textarea id="care-note" name="care-note" maxlength="1200" rows="2" data-care-note placeholder="例如：紫苏水仓还是满的；文竹有两片黄叶。"></textarea>
             </label>
             <div class="receipt-actions">
-              <button class="submit-receipt" type="submit" data-submit-care>提交本次记录 <span aria-hidden="true">→</span></button>
+              <button class="submit-receipt" type="submit" data-submit-care>保存本次记录 <span aria-hidden="true">→</span></button>
               <button class="clear-receipt" type="button" data-connect-care hidden>连接私人同步</button>
               <button class="clear-receipt" type="button" data-clear-receipt>清除未提交</button>
             </div>
-            <p class="receipt-help">提交后先保存到 Cloudflare；断网时暂存在本机，恢复网络后自动重试。</p>
+            <p class="receipt-help">断网时会先存在本机，恢复网络后自动保存。</p>
             <p class="receipt-status" role="status" data-receipt-status></p>
           </form>
         </section>
@@ -1268,7 +1268,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-09-01 20:24（Asia/Shanghai）</p>
+      <p>数据生成于 2026-09-01 20:30（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>

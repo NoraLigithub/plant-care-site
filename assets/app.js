@@ -117,7 +117,7 @@ if (receiptForm) {
     const pending = pendingTasks();
     if (summary) {
       if (!taskInputs.length) {
-        summary.textContent = "今天没有预设任务，可以直接写文字补充";
+        summary.textContent = "今天没有预设任务，可以直接写补充说明";
       } else if (!selected.length) {
         summary.textContent = `0 / ${taskInputs.length} 项已完成`;
       } else if (pending.length) {
@@ -286,8 +286,8 @@ if (receiptForm) {
     if (!selected.length && !note) {
       if (status) {
         status.textContent = selectedTasks().length
-          ? "已完成项目都记录过了；可以再勾选新项目或写一句补充。"
-          : "请至少完成一项，或者写一句补充。";
+          ? "已完成项目都记录过了；可以再勾选新项目或写一句补充说明。"
+          : "请至少完成一项，或者写一句补充说明。";
       }
       if (!selectedTasks().length) noteInput?.focus();
       return;
@@ -317,7 +317,7 @@ if (receiptForm) {
         ? "已保存到 Cloudflare；私仓备份稍后自动补上。"
         : selected.length
           ? `已保存 ${selected.length} 个新增完成项目。`
-          : "文字补充已保存。";
+          : "补充说明已保存，Agent 之后能看到。";
     } catch (error) {
       if (error.status === 401 && connectButton) connectButton.hidden = false;
       if (status) status.textContent = error.status === 401
