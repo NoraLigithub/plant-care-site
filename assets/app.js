@@ -231,7 +231,7 @@ if (receiptForm && isPrivateCareSite) {
 
   const careRequest = async (path, options = {}) => {
     if (!apiUrl) {
-      const error = new Error("私人页面尚未准备好");
+      const error = new Error("记录功能尚未准备好");
       error.status = 0;
       throw error;
     }
@@ -348,13 +348,13 @@ if (receiptForm && isPrivateCareSite) {
       if (noteInput) noteInput.value = "";
       saveDraft();
       if (status) status.textContent = result.backup_pending
-        ? "已保存到 Cloudflare；私仓备份稍后自动补上。"
+        ? "已经保存，备份稍后自动完成。"
         : selected.length
           ? `已保存 ${selected.length} 个新增完成项目。`
           : "补充说明已保存，Agent 之后能看到。";
     } catch (error) {
       if (status) status.textContent = error.status === 401
-        ? "私人记录暂时不可用，请告诉 Agent 帮你恢复；本次内容仍保存在这台设备。"
+        ? "记录功能暂时不可用，请告诉 Agent 帮你恢复；本次内容仍保存在这台设备。"
         : "暂时没能写入云端，内容已保存在本机，联网后会自动重试。";
     } finally {
       if (submitButton) submitButton.disabled = false;

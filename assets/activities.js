@@ -78,7 +78,7 @@ if (dailyApp) {
   });
   const apiRequest = async (path, options = {}) => {
     if (!apiUrl) {
-      const error = new Error("私人页面尚未发布");
+      const error = new Error("记录功能尚未准备好");
       error.status = 0;
       throw error;
     }
@@ -253,11 +253,11 @@ if (dailyApp) {
     if (dashboard) dashboard.hidden = false;
     if (syncState) syncState.textContent = stale
       ? "显示上次保存的数据 · 等待网络恢复"
-      : "私人记录已自动保存";
+      : "记录已自动保存";
     safeStorage.set(cacheKey, JSON.stringify({ activities: entries, daily_message: message || publicMessage }));
   };
 
-  const showLocked = (message = "记录请到私人页面") => {
+  const showLocked = (message = "这里暂时只供查看") => {
     if (locked) locked.hidden = false;
     if (dashboard) dashboard.hidden = true;
     setText("[data-hero-meditation]", "—");
@@ -384,7 +384,7 @@ if (dailyApp) {
     setText("[data-success-summary]", summary);
     setText(
       "[data-success-feedback]",
-      result.backup_pending ? "已存 Cloudflare，私仓备份稍后自动补上。" : "",
+      result.backup_pending ? "已经保存，备份稍后自动完成。" : "",
     );
     const undo = document.querySelector("[data-undo-activity]");
     if (undo) undo.hidden = false;
@@ -412,7 +412,7 @@ if (dailyApp) {
       if (error.status === 401) {
         showActivityPanel(activityId);
         showStep("record");
-        if (feedback) feedback.textContent = "私人记录暂时不可用，请告诉 Agent 帮你恢复。刚才的记录仍在这台设备等待保存。";
+        if (feedback) feedback.textContent = "记录功能暂时不可用，请告诉 Agent 帮你恢复。刚才的记录仍在这台设备等待保存。";
         return;
       }
       showActivityPanel(activityId);
@@ -498,7 +498,7 @@ if (dailyApp) {
         savePending(pendingRecords().filter((item) => item.idempotency_key !== pending.idempotency_key));
       } catch (error) {
         if (error.status === 401) {
-          showLocked("私人记录暂时不可用，请告诉 Agent 帮你恢复");
+          showLocked("记录功能暂时不可用，请告诉 Agent 帮你恢复");
         }
         return;
       }
@@ -511,13 +511,13 @@ if (dailyApp) {
       .then(retryPending)
       .catch((error) => {
         if (error.status === 401) {
-          showLocked("私人记录暂时不可用，请告诉 Agent 帮你恢复");
+          showLocked("记录功能暂时不可用，请告诉 Agent 帮你恢复");
         } else if (cached?.activities) {
           renderActivities(cached.activities, cached.daily_message, true);
         } else {
-          showLocked("暂时无法读取私人记录");
+          showLocked("暂时无法读取我的记录");
         }
       });
-  } else if (syncState) syncState.textContent = "公开页面只查看 · 记录请到私人页面";
+  } else if (syncState) syncState.textContent = "这里暂时只供查看 · 去日常花园记录";
   window.addEventListener("online", retryPending);
 }
