@@ -480,6 +480,8 @@ h1, h2, h3, p { margin-top: 0; }
 .task-card.is-receipted .task-check { color: #668071; }
 .supplement-only { min-height: 48px; background: #f8faf6; }
 .supplement-only .task-copy h3 { font-size: 15px; }
+.supplement-group { min-height: 62px; }
+.supplement-group .task-detail { overflow: visible; white-space: normal; text-overflow: clip; }
 .empty-state {
   grid-column: 1 / -1;
   display: flex;
@@ -642,6 +644,7 @@ footer { padding-block: 34px; color: rgba(255, 255, 255, .7); background: #0c2a2
   .task-copy h3 { font-size: 16px; }
   .task-detail { font-size: 11px; }
   .supplement-only { min-height: 44px; }
+  .supplement-group { min-height: 58px; }
   .due-badge { width: fit-content; }
   .upcoming { padding: 24px; }
   .receipt-card { margin-top: 12px; padding: 14px; }

@@ -60,7 +60,7 @@ const privateCareLink = document.querySelector("[data-care-private-link]");
 if (receiptForm && !isPrivateCareSite) {
   receiptForm.hidden = true;
   if (privateCareLink) privateCareLink.hidden = false;
-  document.querySelectorAll("[data-care-task]").forEach((input) => {
+  document.querySelectorAll("[data-care-task], [data-care-group-checkbox]").forEach((input) => {
     input.disabled = true;
     const state = input.closest(".task-check")?.querySelector("[data-task-state]");
     if (state) state.textContent = "私人页记录";
@@ -69,6 +69,7 @@ if (receiptForm && !isPrivateCareSite) {
 
 if (receiptForm && isPrivateCareSite) {
   const taskInputs = [...document.querySelectorAll("[data-care-task]")];
+  const groupInputs = [...document.querySelectorAll("[data-care-group-checkbox]")];
   const dateInput = receiptForm.querySelector("[data-care-date]");
   const noteInput = receiptForm.querySelector("[data-care-note]");
   const summary = receiptForm.querySelector("[data-selected-summary]");
@@ -111,10 +112,19 @@ if (receiptForm && isPrivateCareSite) {
     input.dataset.careAction,
   ].join(":");
 
+  const groupMembers = (groupInput) => taskInputs.filter(
+    (input) => input.dataset.careGroupId === groupInput.dataset.careGroupId,
+  );
+
   const resetTaskSelection = () => {
     syncedTasks.clear();
     taskInputs.forEach((input) => {
       input.checked = false;
+      input.disabled = false;
+    });
+    groupInputs.forEach((input) => {
+      input.checked = false;
+      input.indeterminate = false;
       input.disabled = false;
     });
   };
@@ -139,10 +149,11 @@ if (receiptForm && isPrivateCareSite) {
   };
 
   const updateCardState = (input) => {
-    const card = input.closest(".task-card");
     const isSynced = syncedTasks.has(taskKey(input));
     if (isSynced) input.checked = true;
     input.disabled = isSynced;
+    if (input.dataset.careGroupId) return;
+    const card = input.closest(".task-card");
     if (card) {
       card.classList.toggle("is-complete", input.checked);
       card.classList.toggle("is-receipted", isSynced);
@@ -150,6 +161,32 @@ if (receiptForm && isPrivateCareSite) {
     const state = input.closest(".task-check")?.querySelector("[data-task-state]");
     if (state) {
       state.textContent = isSynced ? "已记录" : input.checked ? "已完成" : "完成";
+    }
+  };
+
+  const updateGroupState = (groupInput) => {
+    const members = groupMembers(groupInput);
+    const selectedCount = members.filter((member) => member.checked).length;
+    const syncedCount = members.filter((member) => syncedTasks.has(taskKey(member))).length;
+    const isComplete = Boolean(members.length) && selectedCount === members.length;
+    const isSynced = Boolean(members.length) && syncedCount === members.length;
+    groupInput.checked = isComplete;
+    groupInput.indeterminate = selectedCount > 0 && !isComplete;
+    groupInput.disabled = isSynced;
+    const card = groupInput.closest(".task-card");
+    if (card) {
+      card.classList.toggle("is-complete", isComplete);
+      card.classList.toggle("is-receipted", isSynced);
+    }
+    const state = groupInput.closest(".task-check")?.querySelector("[data-task-state]");
+    if (state) {
+      state.textContent = isSynced
+        ? "已记录"
+        : isComplete
+          ? "整组已完成"
+          : selectedCount
+            ? `${selectedCount} / ${members.length} 已完成`
+            : "整组完成";
     }
   };
 
@@ -168,6 +205,7 @@ if (receiptForm && isPrivateCareSite) {
       }
     }
     taskInputs.forEach(updateCardState);
+    groupInputs.forEach(updateGroupState);
   };
 
   const saveDraft = () => {
@@ -197,6 +235,18 @@ if (receiptForm && isPrivateCareSite) {
 
   taskInputs.forEach((input) => {
     input.addEventListener("change", () => {
+      updateSummary();
+      saveDraft();
+      if (status) status.textContent = "";
+    });
+  });
+  groupInputs.forEach((groupInput) => {
+    groupInput.addEventListener("change", () => {
+      groupMembers(groupInput).forEach((member) => {
+        if (!syncedTasks.has(taskKey(member))) {
+          member.checked = groupInput.checked;
+        }
+      });
       updateSummary();
       saveDraft();
       if (status) status.textContent = "";
