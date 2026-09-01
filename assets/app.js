@@ -40,7 +40,7 @@ if (isPrivateCareSite) {
   const connection = new URLSearchParams(window.location.hash.slice(1));
   const connectionToken = connection.get("connect");
   if (connectionToken) {
-    const nextSection = ["rituals", "today"].includes(connection.get("next"))
+    const nextSection = ["rituals", "today", "history"].includes(connection.get("next"))
       ? `#${connection.get("next")}`
       : "";
     window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}${nextSection}`);
