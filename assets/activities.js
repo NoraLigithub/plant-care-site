@@ -241,6 +241,14 @@ if (dailyApp) {
     renderMilestone(card, stats);
   };
 
+  const scrollToHistory = () => {
+    if (window.location.hash !== "#history") return;
+    window.requestAnimationFrame(() => {
+      const history = document.querySelector("#history");
+      history?.scrollIntoView({ block: "start" });
+    });
+  };
+
   const renderActivities = (entries, message = "", stale = false) => {
     activityEntries = entries;
     entries.forEach(renderActivity);
@@ -251,6 +259,7 @@ if (dailyApp) {
     if (message && dailyMessage) dailyMessage.textContent = message;
     if (locked) locked.hidden = true;
     if (dashboard) dashboard.hidden = false;
+    scrollToHistory();
     if (syncState) syncState.textContent = stale
       ? "显示上次保存的数据 · 等待网络恢复"
       : "记录已自动保存";
