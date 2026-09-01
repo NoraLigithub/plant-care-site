@@ -107,6 +107,60 @@ if (dailyApp) {
     if (element) element.textContent = String(value);
   };
 
+  const formatCount = (value) => {
+    const count = Number(value) || 0;
+    if (count >= 10000 && count % 10000 === 0) return `${count / 10000} 万`;
+    return new Intl.NumberFormat("zh-CN").format(count);
+  };
+
+  const recentDate = (occurredAt) => {
+    const parsed = new Date(occurredAt);
+    if (Number.isNaN(parsed.valueOf())) return "日期待确认";
+    return new Intl.DateTimeFormat("zh-CN", {
+      timeZone: "Asia/Shanghai",
+      month: "numeric",
+      day: "numeric",
+    }).format(parsed);
+  };
+
+  const renderRecent = (container, stats) => {
+    if (!container) return;
+    container.replaceChildren();
+    if (!stats.recent.length) {
+      const empty = document.createElement("li");
+      empty.textContent = "还没有记录";
+      container.append(empty);
+      return;
+    }
+    stats.recent.slice(0, 5).forEach((record) => {
+      const item = document.createElement("li");
+      const value = stats.metric_type === "duration"
+        ? `${record.value} 分钟`
+        : `${formatCount(record.value)} 次 · ${record.duration_minutes || 0} 分钟`;
+      item.textContent = `${recentDate(record.occurred_at)} · ${value}`;
+      container.append(item);
+    });
+  };
+
+  const renderMilestone = (card, stats) => {
+    const milestone = stats.milestone;
+    const panel = card.querySelector("[data-chanting-milestone]");
+    if (!panel || !milestone) return;
+    const progress = panel.querySelector("[data-milestone-progress]");
+    if (progress) progress.value = milestone.progress_percent;
+    if (milestone.next) {
+      setText("[data-milestone-next]", `${formatCount(milestone.next)} 次`, panel);
+      setText(
+        "[data-milestone-detail]",
+        `累计 ${formatCount(stats.total_value)} 次，还差 ${formatCount(milestone.remaining)} 次。`,
+        panel,
+      );
+    } else {
+      setText("[data-milestone-next]", "100 万次已达成", panel);
+      setText("[data-milestone-detail]", `累计 ${formatCount(stats.total_value)} 次，继续按自己的节律。`, panel);
+    }
+  };
+
   const renderHeatmap = (container, stats) => {
     if (!container) return;
     container.replaceChildren();
@@ -119,7 +173,7 @@ if (dailyApp) {
       if (entry.date === stats.as_of) cell.classList.add("is-today");
       const detail = stats.metric_type === "duration"
         ? `${entry.sessions} 次，${value} 分钟`
-        : `${entry.sessions} 次`;
+        : `${value} 次，${entry.duration_minutes || 0} 分钟`;
       cell.title = `${entry.date}：${detail}`;
       cell.setAttribute("aria-label", cell.title);
       container.append(cell);
@@ -134,9 +188,13 @@ if (dailyApp) {
     setText('[data-stat="today-sessions"]', stats.today_sessions, card);
     setText('[data-stat="week-value"]', stats.week_value, card);
     setText('[data-stat="week-sessions"]', stats.week_sessions, card);
+    setText('[data-stat="week-duration"]', stats.week_duration_minutes ?? 0, card);
     setText('[data-stat="streak"]', stats.current_streak, card);
     setText('[data-stat="total-sessions"]', stats.total_sessions, card);
+    setText('[data-stat="total-value"]', stats.total_value ?? 0, card);
     renderHeatmap(card.querySelector("[data-activity-heatmap]"), stats);
+    renderRecent(card.querySelector("[data-recent-records]"), stats);
+    renderMilestone(card, stats);
   };
 
   const renderActivities = (entries, message = "", stale = false) => {
@@ -145,7 +203,7 @@ if (dailyApp) {
     const meditation = entries.find((entry) => entry.activity.activity_id === "A0001");
     const chanting = entries.find((entry) => entry.activity.activity_id === "A0002");
     setText("[data-hero-meditation]", meditation?.stats.week_value ?? 0);
-    setText("[data-hero-chanting]", chanting?.stats.week_sessions ?? 0);
+    setText("[data-hero-chanting]", chanting?.stats.week_value ?? 0);
     if (message && dailyMessage) dailyMessage.textContent = message;
     if (locked) locked.hidden = true;
     if (dashboard) dashboard.hidden = false;
@@ -263,14 +321,15 @@ if (dailyApp) {
     const existing = activityEntries.find((entry) => entry.activity.activity_id === result.activity.activity_id);
     if (existing) existing.stats = result.stats;
     renderActivities(activityEntries, dailyMessage?.textContent || publicMessage);
+    const latest = result.stats.recent[0] || {};
     const valueLabel = result.activity.metric_type === "duration"
-      ? `${result.stats.recent[0]?.value || 0} ${result.activity.metric_unit}`
-      : "这一次";
+      ? `${latest.value || 0} ${result.activity.metric_unit}`
+      : `${formatCount(latest.value)} 次`;
     setText("[data-success-title]", `已记录${activityName(result.activity.activity_id)} ${valueLabel}`);
     setText("[data-completion-message]", result.encouragement);
     const summary = result.activity.metric_type === "duration"
       ? `本周 ${result.stats.week_sessions} 次 · ${result.stats.week_value} 分钟；累计 ${result.stats.total_sessions} 次`
-      : `本周 ${result.stats.week_sessions} 次；累计 ${result.stats.total_sessions} 次`;
+      : `本次 ${latest.duration_minutes || 0} 分钟 · ${formatCount(latest.value)} 次；累计 ${formatCount(result.stats.total_value)} 次 · ${result.stats.total_duration_minutes} 分钟`;
     setText("[data-success-summary]", summary);
     setText(
       "[data-success-feedback]",
@@ -281,10 +340,11 @@ if (dailyApp) {
     showStep("success");
   };
 
-  const submitRecord = async (activityId, value, occurredOn = today) => {
+  const submitRecord = async (activityId, value, occurredOn = today, durationMinutes = 0) => {
     const pending = {
       activity_id: activityId,
       value: Number(value),
+      duration_minutes: Number(durationMinutes) || undefined,
       occurred_on: occurredOn,
       idempotency_key: idempotencyKey(),
     };
@@ -331,7 +391,13 @@ if (dailyApp) {
   document.querySelector("[data-chanting-form]")?.addEventListener("submit", (event) => {
     event.preventDefault();
     const occurredOn = document.querySelector('[data-activity-date="A0002"]')?.value || today;
-    submitRecord("A0002", 1, occurredOn);
+    const chanting = activityEntries.find((entry) => entry.activity.activity_id === "A0002")?.activity || {};
+    submitRecord(
+      "A0002",
+      Number(chanting.default_value) || 600,
+      occurredOn,
+      Number(chanting.default_duration_minutes) || 20,
+    );
   });
 
   document.querySelector("[data-undo-activity]")?.addEventListener("click", async (event) => {
@@ -362,9 +428,17 @@ if (dailyApp) {
     if (!isPrivateSite || !apiUrl || !navigator.onLine) return;
     for (const pending of pendingRecords()) {
       try {
+        const activity = activityEntries.find((entry) => entry.activity.activity_id === pending.activity_id)?.activity || {};
+        const normalizedPending = pending.activity_id === "A0002" && (!pending.duration_minutes || Number(pending.value) === 1)
+          ? {
+              ...pending,
+              value: Number(activity.default_value) || 600,
+              duration_minutes: Number(activity.default_duration_minutes) || 20,
+            }
+          : pending;
         await apiRequest(`/api/activities/${pending.activity_id}/records`, {
           method: "POST",
-          body: JSON.stringify(pending),
+          body: JSON.stringify(normalizedPending),
         });
         savePending(pendingRecords().filter((item) => item.idempotency_key !== pending.idempotency_key));
       } catch (error) {
