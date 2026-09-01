@@ -76,6 +76,13 @@ if (receiptForm && isPrivateCareSite) {
   const status = receiptForm.querySelector("[data-receipt-status]");
   const clearButton = receiptForm.querySelector("[data-clear-receipt]");
   const submitButton = receiptForm.querySelector("[data-submit-care]");
+  const openTaskList = document.querySelector("[data-open-care-tasks]");
+  const completedTaskSection = document.querySelector("[data-completed-care-tasks]");
+  const completedTaskList = document.querySelector("[data-completed-care-list]");
+  const completedTaskSummary = document.querySelector("[data-completed-care-summary]");
+  const completedTaskCount = document.querySelector("[data-completed-care-count]");
+  const taskCards = [...document.querySelectorAll("[data-care-task-card]")];
+  const taskCardOrder = new Map(taskCards.map((card, index) => [card, index]));
   const apiUrl = privateApiUrl;
   const defaultDate = receiptForm.dataset.defaultDate;
   const storageKey = `plant-care-receipt:${defaultDate}`;
@@ -133,6 +140,33 @@ if (receiptForm && isPrivateCareSite) {
   const pendingTasks = () => selectedTasks().filter(
     (input) => !syncedTasks.has(taskKey(input)),
   );
+
+  const updateTaskCollections = () => {
+    if (!openTaskList || !completedTaskList || !completedTaskSection) return;
+    let focusedCardWasCollected = false;
+    taskCards.forEach((card) => {
+      const destination = card.classList.contains("is-complete")
+        ? completedTaskList
+        : openTaskList;
+      if (card.parentElement === destination) return;
+      if (card.contains(document.activeElement)) focusedCardWasCollected = true;
+      destination.append(card);
+    });
+    [openTaskList, completedTaskList].forEach((list) => {
+      [...list.querySelectorAll(":scope > [data-care-task-card]")]
+        .sort((left, right) => taskCardOrder.get(left) - taskCardOrder.get(right))
+        .forEach((card) => list.append(card));
+    });
+    const completeCount = completedTaskList.querySelectorAll(
+      ":scope > [data-care-task-card]",
+    ).length;
+    completedTaskSection.hidden = completeCount === 0;
+    if (completedTaskCount) completedTaskCount.textContent = `${completeCount} 项`;
+    if (!completeCount) completedTaskSection.open = false;
+    if (focusedCardWasCollected && !completedTaskSection.open) {
+      completedTaskSummary?.focus({ preventScroll: true });
+    }
+  };
 
   const pendingReceipts = () => {
     try {
@@ -206,6 +240,7 @@ if (receiptForm && isPrivateCareSite) {
     }
     taskInputs.forEach(updateCardState);
     groupInputs.forEach(updateGroupState);
+    updateTaskCollections();
   };
 
   const saveDraft = () => {
@@ -254,6 +289,7 @@ if (receiptForm && isPrivateCareSite) {
   });
   dateInput?.addEventListener("change", () => {
     resetTaskSelection();
+    updateSummary();
     saveDraft();
     if (status) status.textContent = "";
     refreshCompleted();
