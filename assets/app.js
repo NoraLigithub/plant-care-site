@@ -111,6 +111,14 @@ if (receiptForm && isPrivateCareSite) {
     input.dataset.careAction,
   ].join(":");
 
+  const resetTaskSelection = () => {
+    syncedTasks.clear();
+    taskInputs.forEach((input) => {
+      input.checked = false;
+      input.disabled = false;
+    });
+  };
+
   const selectedTasks = () => taskInputs.filter((input) => input.checked);
   const pendingTasks = () => selectedTasks().filter(
     (input) => !syncedTasks.has(taskKey(input)),
@@ -195,10 +203,7 @@ if (receiptForm && isPrivateCareSite) {
     });
   });
   dateInput?.addEventListener("change", () => {
-    syncedTasks.clear();
-    taskInputs.forEach((input) => {
-      input.disabled = false;
-    });
+    resetTaskSelection();
     saveDraft();
     if (status) status.textContent = "";
     refreshCompleted();
@@ -300,6 +305,7 @@ if (receiptForm && isPrivateCareSite) {
     try {
       const operationDate = dateInput?.value || defaultDate;
       const result = await careRequest(`/api/care?date=${encodeURIComponent(operationDate)}`);
+      if ((dateInput?.value || defaultDate) !== operationDate) return;
       applyCompletedKeys(result.completed_keys);
     } catch (_error) {
       // 登录过期或暂时断网时保留当前页面和本机草稿。
