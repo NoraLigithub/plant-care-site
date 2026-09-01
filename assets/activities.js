@@ -15,7 +15,9 @@ if (dailyApp) {
   const dashboard = document.querySelector("[data-activity-dashboard]");
   const dailyMessage = document.querySelector("[data-daily-message]");
   const syncState = document.querySelector("[data-sync-state]");
+  const activitySaveState = document.querySelector("[data-activity-save-state]");
   const feedback = document.querySelector("[data-activity-feedback]");
+  const modalClose = document.querySelector("[data-close-activity]");
   const customForm = document.querySelector("[data-custom-duration]");
   const today = localLifeDate();
   let selectedActivityId = "A0001";
@@ -241,6 +243,8 @@ if (dailyApp) {
   };
 
   const showStep = (name) => {
+    if (modal) modal.dataset.activityState = name;
+    if (modalClose) modalClose.hidden = name === "saving";
     steps.forEach((step) => {
       step.hidden = step.dataset.activityStep !== name;
     });
@@ -277,6 +281,7 @@ if (dailyApp) {
 
   const closeModal = () => {
     if (!modal) return;
+    if (modal.dataset.activityState === "saving") return;
     modal.hidden = true;
     document.body.classList.remove("modal-open");
     returnFocus?.focus?.();
@@ -285,7 +290,7 @@ if (dailyApp) {
   document.querySelectorAll("[data-open-activity]").forEach((button) => {
     button.addEventListener("click", () => openModal(button.dataset.openActivity));
   });
-  document.querySelector("[data-close-activity]")?.addEventListener("click", closeModal);
+  modalClose?.addEventListener("click", closeModal);
   document.querySelector("[data-finish-activity]")?.addEventListener("click", closeModal);
   modal?.addEventListener("click", (event) => {
     if (event.target === modal) closeModal();
@@ -325,6 +330,10 @@ if (dailyApp) {
     const valueLabel = result.activity.metric_type === "duration"
       ? `${latest.value || 0} ${result.activity.metric_unit}`
       : `${formatCount(latest.value)} 次`;
+    if (activitySaveState) {
+      activitySaveState.textContent = `✓ 已保存：${activityName(result.activity.activity_id)} ${valueLabel}`;
+      activitySaveState.hidden = false;
+    }
     setText("[data-success-title]", `已记录${activityName(result.activity.activity_id)} ${valueLabel}`);
     setText("[data-completion-message]", result.encouragement);
     const summary = result.activity.metric_type === "duration"
@@ -414,6 +423,10 @@ if (dailyApp) {
       setText("[data-completion-message]", "没关系，当前统计已经恢复。需要时可以重新记录。");
       setText("[data-success-summary]", `本周 ${result.stats.week_sessions} 次`);
       setText("[data-success-feedback]", "");
+      if (activitySaveState) {
+        activitySaveState.textContent = "刚才的记录已撤销";
+        activitySaveState.hidden = false;
+      }
       button.hidden = true;
       lastRecordId = "";
       lastRecordActivityId = "";
