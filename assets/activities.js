@@ -115,33 +115,75 @@ if (dailyApp) {
     return new Intl.NumberFormat("zh-CN").format(count);
   };
 
-  const recentDate = (occurredAt) => {
+  const historyDate = (occurredAt) => {
     const parsed = new Date(occurredAt);
     if (Number.isNaN(parsed.valueOf())) return "日期待确认";
-    return new Intl.DateTimeFormat("zh-CN", {
+    const date = new Intl.DateTimeFormat("zh-CN", {
       timeZone: "Asia/Shanghai",
+      year: "numeric",
       month: "numeric",
       day: "numeric",
     }).format(parsed);
+    const weekday = new Intl.DateTimeFormat("zh-CN", {
+      timeZone: "Asia/Shanghai",
+      weekday: "short",
+    }).format(parsed);
+    return `${date} · ${weekday}`;
   };
 
-  const renderRecent = (container, stats) => {
-    if (!container) return;
-    container.replaceChildren();
+  const renderHistory = (card, stats) => {
+    const history = document.querySelector(`[data-activity-history="${stats.activity_id}"]`);
+    if (!history) return;
+    const list = history.querySelector("[data-history-list]");
+    const total = history.querySelector("[data-history-total]");
+    const footnote = history.querySelector("[data-history-footnote]");
+    const state = card.querySelector("[data-record-state]");
+    const isMeditation = stats.metric_type === "duration";
+    if (state) {
+      state.classList.toggle("is-recorded", stats.today_sessions > 0);
+      const stateText = state.querySelector("strong");
+      if (stateText) {
+        stateText.textContent = stats.today_sessions > 0
+          ? isMeditation
+            ? `✓ 已记录 ${stats.today_value} 分钟 · ${stats.today_sessions} 次`
+            : `✓ 已记录 ${formatCount(stats.today_value)} 次 · ${stats.today_duration_minutes} 分钟`
+          : "还没有记录";
+      }
+    }
+    if (total) {
+      total.textContent = isMeditation
+        ? `共 ${stats.total_sessions} 次 · ${stats.total_value} 分钟`
+        : `共 ${stats.total_sessions} 回 · ${formatCount(stats.total_value)} 次 · ${stats.total_duration_minutes} 分钟`;
+    }
+    if (!list) return;
+    list.replaceChildren();
     if (!stats.recent.length) {
       const empty = document.createElement("li");
-      empty.textContent = "还没有记录";
-      container.append(empty);
+      empty.className = "history-empty";
+      empty.textContent = "还没有历史记录；第一次保存后会出现在这里。";
+      list.append(empty);
+      if (footnote) footnote.textContent = "";
       return;
     }
-    stats.recent.slice(0, 5).forEach((record) => {
+    stats.recent.forEach((record) => {
       const item = document.createElement("li");
-      const value = stats.metric_type === "duration"
+      const date = document.createElement("time");
+      const value = document.createElement("strong");
+      const saved = document.createElement("span");
+      date.dateTime = record.occurred_at;
+      date.textContent = historyDate(record.occurred_at);
+      value.textContent = isMeditation
         ? `${record.value} 分钟`
         : `${formatCount(record.value)} 次 · ${record.duration_minutes || 0} 分钟`;
-      item.textContent = `${recentDate(record.occurred_at)} · ${value}`;
-      container.append(item);
+      saved.textContent = "已保存";
+      item.append(date, value, saved);
+      list.append(item);
     });
+    if (footnote) {
+      footnote.textContent = stats.total_sessions > stats.recent.length
+        ? `显示最近 ${stats.recent.length} 条；历史累计 ${stats.total_sessions} 条。`
+        : `已显示全部 ${stats.total_sessions} 条记录。`;
+    }
   };
 
   const renderMilestone = (card, stats) => {
@@ -195,7 +237,7 @@ if (dailyApp) {
     setText('[data-stat="total-sessions"]', stats.total_sessions, card);
     setText('[data-stat="total-value"]', stats.total_value ?? 0, card);
     renderHeatmap(card.querySelector("[data-activity-heatmap]"), stats);
-    renderRecent(card.querySelector("[data-recent-records]"), stats);
+    renderHistory(card, stats);
     renderMilestone(card, stats);
   };
 

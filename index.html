@@ -62,7 +62,7 @@
       <div class="shell">
         <div class="section-heading meditation-heading">
           <div><p class="kicker dark">DAILY RHYTHM</p><h2>今天想守住的小事</h2></div>
-          <p>勾选完成的事项，再点“保存本次记录”，就会保存并自动备份到私仓。</p>
+          <p>每次保存都会写入私人数据库；下面能看到日期、时长和累计统计。</p>
         </div>
 
         <div class="meditation-connect-card" data-activity-locked hidden>
@@ -80,6 +80,7 @@
               <div><p class="eyebrow">MEDITATION</p><h3>打坐</h3><p>坐多久都算，先回来就好。</p></div>
               <button type="button" data-open-activity="A0001">选择时长 <span aria-hidden="true">→</span></button>
             </div>
+            <div class="ritual-record-state" data-record-state><span>今天</span><strong>正在读取记录…</strong></div>
             <div class="ritual-today"><span>今天</span><strong data-stat="today-value">0</strong><small>分钟</small></div>
             <div class="ritual-meta">
               <span>本周 <strong data-stat="week-value">0</strong> 分钟</span>
@@ -87,10 +88,6 @@
               <span>累计 <strong data-stat="total-sessions">0</strong> 次</span>
             </div>
             <div class="heatmap" data-activity-heatmap aria-label="最近30天打坐记录"></div>
-            <div class="recent-records">
-              <h4>最近记录</h4>
-              <ul data-recent-records><li>还没有记录</li></ul>
-            </div>
           </article>
 
           <article class="ritual-card chanting-ritual" data-activity-card="A0002">
@@ -98,6 +95,7 @@
               <div><p class="eyebrow">RECITATION</p><h3>读咒</h3><p>一次固定日课：20 分钟 · 600 次。</p></div>
               <button type="button" data-open-activity="A0002">记录日课 <span aria-hidden="true">→</span></button>
             </div>
+            <div class="ritual-record-state" data-record-state><span>今天</span><strong>正在读取记录…</strong></div>
             <div class="ritual-today"><span>今天</span><strong data-stat="today-value">0</strong><small>次</small></div>
             <div class="ritual-meta">
               <span>本周 <strong data-stat="week-value">0</strong> 次</span>
@@ -112,11 +110,26 @@
               <progress max="100" value="0" data-milestone-progress aria-label="读咒里程碑进度"></progress>
               <p data-milestone-detail>从第一遍开始积累。</p>
             </div>
-            <div class="recent-records">
-              <h4>最近记录</h4>
-              <ul data-recent-records><li>还没有记录</li></ul>
-            </div>
           </article>
+
+          <section class="activity-history-board" aria-labelledby="activity-history-title">
+            <div class="activity-history-title">
+              <div><p class="eyebrow">SAVED HISTORY</p><h3 id="activity-history-title">历史记录</h3></div>
+              <p>哪天做了、做了多久，都从私人数据库读取。</p>
+            </div>
+            <div class="activity-history-grid">
+              <article class="activity-history-card" data-activity-history="A0001">
+                <header><div><span class="history-mark" aria-hidden="true">◉</span><h4>打坐记录</h4></div><strong data-history-total>正在读取…</strong></header>
+                <ol data-history-list><li class="history-empty">正在读取历史记录…</li></ol>
+                <p class="history-footnote" data-history-footnote></p>
+              </article>
+              <article class="activity-history-card chanting-history" data-activity-history="A0002">
+                <header><div><span class="history-mark" aria-hidden="true">念</span><h4>读咒记录</h4></div><strong data-history-total>正在读取…</strong></header>
+                <ol data-history-list><li class="history-empty">正在读取历史记录…</li></ol>
+                <p class="history-footnote" data-history-footnote></p>
+              </article>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -1276,7 +1289,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-09-01 22:42（Asia/Shanghai）</p>
+      <p>数据生成于 2026-09-01 22:43（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>
