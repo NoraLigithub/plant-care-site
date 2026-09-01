@@ -5,19 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173b2c">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="description" content="打坐记录与家庭养护看板">
+  <meta name="description" content="打坐、读咒与家庭养护的私人日常看板">
   <title>我的日常花园</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css">
   <script src="assets/app.js" defer></script>
+  <script src="assets/activities.js" defer></script>
 </head>
-<body data-meditation-app data-api-url="" data-default-date="2026-09-01" data-repository="NoraLigithub/plant-care">
-  <a class="skip-link" href="#meditation">跳到静心记录</a>
+<body data-daily-app data-api-url="https://daily-garden.pages.dev" data-default-date="2026-09-01" data-repository="NoraLigithub/plant-care">
+  <a class="skip-link" href="#rituals">跳到今日节律</a>
   <header class="hero">
     <nav class="nav shell" aria-label="页面导航">
       <a class="brand" href="#top" aria-label="回到顶部"><span aria-hidden="true">⌇</span> 日常花园</a>
       <div class="nav-links">
-        <a href="#meditation">静心</a>
+        <a href="#rituals">节律</a>
         <a href="#today">今天</a>
         <a href="#plants">植物</a>
         <a href="#items">物品</a>
@@ -29,22 +30,26 @@
         <h1>今天，也给自己<br>留一点安静。</h1>
         <p class="hero-date">2026 年 9 月 1 日 · 星期二</p>
         <blockquote class="daily-message" data-daily-message>今天也给自己留一小块不被催促的时间。</blockquote>
-        <div class="hero-actions">
-          <button class="meditation-cta" type="button" data-open-meditation>
+        <div class="hero-actions ritual-actions">
+          <button class="meditation-cta" type="button" data-open-activity="A0001">
             <span class="meditation-cta-mark" aria-hidden="true">◉</span>
-            <span><small>一键记录</small><strong>记一次打坐</strong></span>
+            <span><small>静心</small><strong>记一次打坐</strong></span>
             <span aria-hidden="true">→</span>
           </button>
-          <a class="hero-secondary" href="#today">查看养护安排 ↓</a>
+          <button class="meditation-cta chanting-cta" type="button" data-open-activity="A0002">
+            <span class="meditation-cta-mark" aria-hidden="true">念</span>
+            <span><small>日课</small><strong>记一次读咒</strong></span>
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
-        <p class="sync-state" data-sync-state aria-live="polite">私人统计尚未连接</p>
+        <p class="sync-state" data-sync-state aria-live="polite">私人记录尚未连接</p>
       </div>
-      <div class="hero-summary" aria-label="本周打坐概览">
+      <div class="hero-summary" aria-label="本周节律概览">
         <div class="summary-orbit orbit-one" aria-hidden="true"></div>
         <div class="summary-orbit orbit-two" aria-hidden="true"></div>
-        <p>本周静心</p>
-        <strong data-hero-week-minutes>—</strong>
-        <span>分钟</span>
+        <p>本周节律</p>
+        <strong><span data-hero-meditation>—</span><i> / </i><span data-hero-chanting>—</span></strong>
+        <span>静心分钟 · 读咒次数</span>
       </div>
     </div>
     <div class="hero-leaf leaf-one" aria-hidden="true"></div>
@@ -52,45 +57,49 @@
   </header>
 
   <main>
-    <section class="section meditation-section" id="meditation">
+    <section class="section meditation-section" id="rituals">
       <div class="shell">
         <div class="section-heading meditation-heading">
-          <div><p class="kicker dark">MEDITATION</p><h2>静心记录</h2></div>
-          <p>原始记录只保存在私人仓库；页面连接后仅取回你的汇总数据。</p>
+          <div><p class="kicker dark">DAILY RHYTHM</p><h2>今天想守住的小事</h2></div>
+          <p>勾下去就算完成。记录先进入 Cloudflare 私人数据库，再自动备份到私仓。</p>
         </div>
 
-        <div class="meditation-connect-card" data-meditation-locked>
+        <div class="meditation-connect-card" data-activity-locked>
           <div class="connect-orb" aria-hidden="true">◌</div>
           <div>
             <h3>连接私人记录</h3>
-            <p>首次输入一次同步口令，以后打坐和养护完成项都可直接写入私人 GitHub。</p>
+            <p>首次输入一次同步口令，以后打坐、读咒和养护 Todo 都会跨设备保存。</p>
           </div>
-          <button type="button" data-connect-meditation>连接</button>
+          <button type="button" data-connect-private>连接</button>
         </div>
 
-        <div class="meditation-dashboard" data-meditation-dashboard hidden>
-          <div class="meditation-stats" aria-label="打坐统计">
-            <article><span>本周</span><strong data-stat-week-sessions>0</strong><small>次</small></article>
-            <article><span>本周时长</span><strong data-stat-week-minutes>0</strong><small>分钟</small></article>
-            <article><span>当前连续</span><strong data-stat-streak>0</strong><small>天</small></article>
-            <article><span>累计</span><strong data-stat-total-sessions>0</strong><small>次</small></article>
-          </div>
+        <div class="meditation-dashboard ritual-dashboard" data-activity-dashboard hidden>
+          <article class="ritual-card meditation-ritual" data-activity-card="A0001">
+            <div class="ritual-card-head">
+              <div><p class="eyebrow">MEDITATION</p><h3>打坐</h3><p>坐多久都算，先回来就好。</p></div>
+              <button type="button" data-open-activity="A0001">记录 <span aria-hidden="true">→</span></button>
+            </div>
+            <div class="ritual-today"><span>今天</span><strong data-stat="today-value">0</strong><small>分钟</small></div>
+            <div class="ritual-meta">
+              <span>本周 <strong data-stat="week-value">0</strong> 分钟</span>
+              <span>连续 <strong data-stat="streak">0</strong> 天</span>
+              <span>累计 <strong data-stat="total-sessions">0</strong> 次</span>
+            </div>
+            <div class="heatmap" data-activity-heatmap aria-label="最近30天打坐记录"></div>
+          </article>
 
-          <div class="meditation-insights">
-            <article class="goal-card">
-              <p class="eyebrow">THIS WEEK</p>
-              <h3>本周节律</h3>
-              <div data-goal-progress></div>
-            </article>
-            <article class="heatmap-card">
-              <div><p class="eyebrow">LAST 30 DAYS</p><h3>最近 30 天</h3></div>
-              <div class="heatmap" data-meditation-heatmap aria-label="最近30天打坐热力图"></div>
-            </article>
-          </div>
-
-          <article class="recent-card">
-            <div><p class="eyebrow">RECENT</p><h3>最近记录</h3></div>
-            <div class="recent-list" data-meditation-recent></div>
+          <article class="ritual-card chanting-ritual" data-activity-card="A0002">
+            <div class="ritual-card-head">
+              <div><p class="eyebrow">RECITATION</p><h3>读咒</h3><p>先按一次日课记录，不要求填遍数。</p></div>
+              <button type="button" data-open-activity="A0002">完成一次 <span aria-hidden="true">→</span></button>
+            </div>
+            <div class="ritual-today"><span>今天</span><strong data-stat="today-sessions">0</strong><small>次</small></div>
+            <div class="ritual-meta">
+              <span>本周 <strong data-stat="week-sessions">0</strong> 次</span>
+              <span>连续 <strong data-stat="streak">0</strong> 天</span>
+              <span>累计 <strong data-stat="total-sessions">0</strong> 次</span>
+            </div>
+            <div class="heatmap" data-activity-heatmap aria-label="最近30天读咒记录"></div>
           </article>
         </div>
       </div>
@@ -486,7 +495,7 @@
         <section class="receipt-card" id="receipt" aria-labelledby="receipt-title">
           <div class="receipt-intro">
             <div><p class="kicker dark">CARE RECEIPT</p><h2 id="receipt-title">完成回执</h2></div>
-            <p>可以分几次完成；每次只提交新增项目，Worker 会直接写入私有 GitHub 仓库。</p>
+            <p>可以分几次完成；每次只提交新增项目，也可以只写一段植物状态说明。</p>
           </div>
           <form data-care-receipt data-repository="NoraLigithub/plant-care" data-default-date="2026-09-01">
             <div class="receipt-toolbar">
@@ -505,7 +514,7 @@
               <button class="clear-receipt" type="button" data-connect-care hidden>连接私人同步</button>
               <button class="clear-receipt" type="button" data-clear-receipt>清除未提交</button>
             </div>
-            <p class="receipt-help">提交后直接记录到私有 GitHub；断网时先保存在本机，恢复网络后自动重试。</p>
+            <p class="receipt-help">提交后先保存到 Cloudflare；断网时暂存在本机，恢复网络后自动重试。</p>
             <p class="receipt-status" role="status" data-receipt-status></p>
           </form>
         </section>
@@ -1191,56 +1200,65 @@
     </section>
   </main>
 
-  <div class="meditation-modal" data-meditation-modal hidden role="dialog" aria-modal="true" aria-labelledby="meditation-modal-title">
-    <button class="modal-close" type="button" aria-label="关闭" data-close-meditation>×</button>
+  <div class="meditation-modal" data-activity-modal hidden role="dialog" aria-modal="true" aria-labelledby="activity-modal-title">
+    <button class="modal-close" type="button" aria-label="关闭" data-close-activity>×</button>
     <div class="meditation-modal-inner">
-      <section class="meditation-step connect-step" data-meditation-step="connect" hidden>
+      <section class="meditation-step connect-step" data-activity-step="connect" hidden>
         <p class="modal-kicker">PRIVATE SYNC</p>
-        <h2 id="meditation-connect-title">连接你的私人记录</h2>
-        <p>同步口令只保存在这台设备，不会写进公开网页。连接后打坐和养护回执会直接进入私人仓库。</p>
-        <form class="connect-form" data-meditation-connect-form>
-          <label for="meditation-token">同步口令</label>
-          <input id="meditation-token" type="password" autocomplete="current-password" required data-meditation-token placeholder="粘贴一次即可">
+        <h2>连接你的私人记录</h2>
+        <p>同步口令只保存在这台设备，不会写进公开网页。连接后，所有 Todo 会进入 Cloudflare 私人数据库。</p>
+        <form class="connect-form" data-private-connect-form>
+          <label for="private-sync-token">同步口令</label>
+          <input id="private-sync-token" type="password" autocomplete="current-password" required data-private-token placeholder="粘贴一次即可">
           <button type="submit">连接并继续</button>
         </form>
         <p class="modal-feedback" data-connect-feedback role="status"></p>
       </section>
 
-      <section class="meditation-step duration-step" data-meditation-step="duration" hidden>
-        <p class="modal-kicker">MEDITATION LOG</p>
-        <h2 id="meditation-modal-title">这次打坐了多久？</h2>
-        <div class="duration-grid">
-          <button type="button" data-duration="30"><strong>30</strong><span>分钟</span></button>
-          <button type="button" data-duration="45"><strong>45</strong><span>分钟</span></button>
-          <button type="button" data-duration="60"><strong>1</strong><span>小时</span></button>
-          <button type="button" data-duration="90"><strong>1.5</strong><span>小时</span></button>
+      <section class="meditation-step duration-step" data-activity-step="record" hidden>
+        <div data-activity-panel="A0001">
+          <p class="modal-kicker">MEDITATION LOG</p>
+          <h2 id="activity-modal-title">这次打坐了多久？</h2>
+          <div class="duration-grid">
+            <button type="button" data-duration="30"><strong>30</strong><span>分钟</span></button>
+            <button type="button" data-duration="45"><strong>45</strong><span>分钟</span></button>
+            <button type="button" data-duration="60"><strong>1</strong><span>小时</span></button>
+            <button type="button" data-duration="90"><strong>1.5</strong><span>小时</span></button>
+          </div>
+          <button class="custom-duration-toggle" type="button" data-custom-duration-toggle>自定义时长或补记日期</button>
+          <form class="custom-duration" data-custom-duration hidden>
+            <label>分钟<input type="number" min="1" max="1440" inputmode="numeric" required data-custom-minutes></label>
+            <label>日期<input type="date" max="2026-09-01" value="2026-09-01" required data-activity-date="A0001"></label>
+            <button type="submit">记录这一次</button>
+          </form>
         </div>
-        <button class="custom-duration-toggle" type="button" data-custom-duration-toggle>自定义时长或补记日期</button>
-        <form class="custom-duration" data-custom-duration hidden>
-          <label>分钟<input type="number" min="1" max="1440" inputmode="numeric" required data-custom-minutes></label>
-          <label>日期<input type="date" max="2026-09-01" value="2026-09-01" required data-meditation-date></label>
-          <button type="submit">记录这一次</button>
-        </form>
-        <p class="modal-feedback" data-meditation-feedback role="status"></p>
-        <a class="fallback-receipt" href="#" data-meditation-fallback hidden>改用私人 GitHub 回执</a>
+        <div data-activity-panel="A0002" hidden>
+          <p class="modal-kicker">RECITATION LOG</p>
+          <h2>今天的读咒，完成了吗？</h2>
+          <form class="chanting-form" data-chanting-form>
+            <label>日期<input type="date" max="2026-09-01" value="2026-09-01" required data-activity-date="A0002"></label>
+            <button type="submit">完成，记下这一次</button>
+          </form>
+        </div>
+        <p class="modal-feedback" data-activity-feedback role="status"></p>
       </section>
 
-      <section class="meditation-step saving-step" data-meditation-step="saving" hidden>
+      <section class="meditation-step saving-step" data-activity-step="saving" hidden>
         <div class="saving-orb" aria-hidden="true"></div>
         <p class="modal-kicker">SAVING</p>
         <h2>正在记下这一刻</h2>
         <p>只需要一小会儿。</p>
       </section>
 
-      <section class="meditation-step success-step" data-meditation-step="success" hidden>
+      <section class="meditation-step success-step" data-activity-step="success" hidden>
         <div class="success-mark" aria-hidden="true">✓</div>
         <p class="modal-kicker">COMPLETED</p>
         <h2 data-success-title>已记录</h2>
         <blockquote data-completion-message></blockquote>
         <p class="success-summary" data-success-summary></p>
         <div class="success-actions">
-          <button type="button" data-finish-meditation>完成</button>
-          <button class="undo-button" type="button" data-undo-meditation>撤销刚才记录</button>
+          <button type="button" data-finish-activity>完成</button>
+          <button class="undo-button" type="button" data-undo-activity>撤销刚才记录</button>
         </div>
         <p class="modal-feedback" data-success-feedback role="status"></p>
       </section>
@@ -1250,7 +1268,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-09-01 11:18（Asia/Shanghai）</p>
+      <p>数据生成于 2026-09-01 20:24（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>
