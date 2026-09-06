@@ -8,9 +8,9 @@
   <meta name="description" content="打坐、读咒与家庭养护的日常看板">
   <title>我的日常花园</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css?v=a418bc6198ee">
-  <script src="assets/app.js?v=a418bc6198ee" defer></script>
-  <script src="assets/activities.js?v=a418bc6198ee" defer></script>
+  <link rel="stylesheet" href="assets/style.css?v=6f9719551f3f">
+  <script src="assets/app.js?v=6f9719551f3f" defer></script>
+  <script src="assets/activities.js?v=6f9719551f3f" defer></script>
 </head>
 <body data-daily-app data-api-url="https://daily-garden.pages.dev" data-default-date="2026-09-06" data-repository="NoraLigithub/plant-care">
   <a class="skip-link" href="#rituals">跳到今日节律</a>
@@ -93,7 +93,7 @@
 
           <article class="ritual-card chanting-ritual" data-activity-card="A0002">
             <div class="ritual-card-head">
-              <div><p class="eyebrow">RECITATION</p><h3>读咒</h3><p>一次固定日课：20 分钟 · 600 次。</p></div>
+              <div><p class="eyebrow">RECITATION</p><h3>读咒</h3><p>一次 20 分钟：600 / 500 / 400 次，按当天的快慢选。</p></div>
               <button type="button" data-open-activity="A0002">记录日课 <span aria-hidden="true">→</span></button>
             </div>
             <div class="ritual-record-state" data-record-state><span>今天</span><strong>正在读取记录…</strong></div>
@@ -1273,7 +1273,11 @@
           <p class="modal-kicker">RECITATION LOG</p>
           <h2>记下今天的读咒</h2>
           <form class="chanting-form" data-chanting-form>
-            <button class="chanting-choice" type="submit"><strong>20 分钟</strong><span>600 次</span><small>完成并保存</small></button>
+            <button class="chanting-choice" type="submit" data-chanting-count="600"><strong>600</strong><span>次 · 20 分钟</span><small>平常速度</small></button>
+            <div class="chanting-alt">
+              <button type="submit" data-chanting-count="500"><strong>500</strong><span>次 · 20 分钟</span></button>
+              <button type="submit" data-chanting-count="400"><strong>400</strong><span>次 · 20 分钟</span></button>
+            </div>
             <label>补记日期<input type="date" max="2026-09-06" value="2026-09-06" required data-activity-date="A0002"></label>
           </form>
         </div>
@@ -1305,7 +1309,7 @@
   <footer>
     <div class="shell footer-inner">
       <div><span aria-hidden="true">⌇</span><strong>日常花园</strong></div>
-      <p>数据生成于 2026-09-07 00:07（Asia/Shanghai）</p>
+      <p>数据生成于 2026-09-07 00:32（Asia/Shanghai）</p>
     </div>
   </footer>
 </body>

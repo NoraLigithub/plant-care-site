@@ -452,9 +452,10 @@ if (dailyApp) {
     event.preventDefault();
     const occurredOn = document.querySelector('[data-activity-date="A0002"]')?.value || today;
     const chanting = activityEntries.find((entry) => entry.activity.activity_id === "A0002")?.activity || {};
+    const chosen = Number(event.submitter?.dataset.chantingCount);
     submitRecord(
       "A0002",
-      Number(chanting.default_value) || 600,
+      Number.isInteger(chosen) && chosen > 0 ? chosen : Number(chanting.default_value) || 600,
       occurredOn,
       Number(chanting.default_duration_minutes) || 20,
     );
